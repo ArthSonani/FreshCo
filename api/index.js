@@ -1,11 +1,21 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import { mongodbURL, PORT } from './config.js'
 
-const app = express()
+import userRouter from './routes/user_route.js'
+
+mongoose.connect(mongodbURL).then(()=>{
+    console.log("Connected to MongoDB!!")
+}).catch((err)=>{
+    console.log(err)
+})
+
+const app = express();
+
+app.use('/api/user', userRouter);
 
 
-
-app.listen(3000, ()=>{
-    console.log("App is runing on 3000!!")
+app.listen(PORT, ()=>{
+    console.log(`App is runing on ${PORT}!!`)
 }
 )
