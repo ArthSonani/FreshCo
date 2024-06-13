@@ -1,9 +1,30 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { signOutFailure, signOutStart, signOutSuccess } from '../redux/user/userSlice';
 
 
 export default function Navbar() {
     const navigate = useNavigate();
+    const dispatch = useDispatch()
+
+    const currentUser = useSelector((state)=>state.user.user)
+
+    const handleSignOut = async()=>{
+      try{
+        dispatch(signOutStart())
+        const res = await fetch('/api/auth/signout')
+        const data = res.json()
+        if(data.success === false){
+          dispatch(signOutFailure(data.message))
+          return
+        }
+        dispatch(signOutSuccess())
+      }
+      catch(err){
+        dispatch(signOutFailure(err))
+      }
+    }
 
   return (
     <nav className='navbar'>
@@ -24,9 +45,10 @@ export default function Navbar() {
           </div>
           <hr style={{margin: '0', width: '90%'}}/>
           <div class="offcanvas-body">
+          <span></span>
           <div className='' onClick={ ()=>navigate('/signin') }><span class="material-symbols-outlined">login</span>Log in</div>
           <div className='' onClick={ ()=>navigate('/signup') }><span class="material-symbols-outlined">person</span>Sign up</div>
-            <div></div>
+          <div className='' onClick={ handleSignOut }>Sign out</div>
           </div>
         </div>
 
@@ -43,8 +65,13 @@ export default function Navbar() {
       </div>
 
       <div className='nav-last'>
-        <div className='nav-link' onClick={ ()=>navigate('/signin') }><span class="material-symbols-outlined">login</span>Log in</div>
-        <div className='nav-link' onClick={ ()=>navigate('/signup') }><span class="material-symbols-outlined">person</span>Sign up</div>
+        {currentUser? (<div className='nav-link' >{currentUser.firstname}</div>): (
+          <>
+          <div className='nav-link' onClick={ ()=>navigate('/signin') }><span class="material-symbols-outlined">login</span>Log in</div>
+          <div className='nav-link' onClick={ ()=>navigate('/signup') }><span class="material-symbols-outlined">person</span>Sign up</div>
+          </>
+        )}
+        
       </div>
 
     </nav>

@@ -1,9 +1,12 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import { mongodbURL, PORT } from './config.js'
-
+import dotenv from 'dotenv'
 import userRouter from './routes/user_route.js'
 import authRouter from './routes/auth_route.js'
+
+dotenv.config()
+
 
 mongoose.connect(mongodbURL).then(()=>{
     console.log("Connected to MongoDB!!")

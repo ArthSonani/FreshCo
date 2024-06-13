@@ -1,11 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { signinFailure, signinStart, signinSuccess } from '../redux/user/userSlice'
 
 export default function Signup() {
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [ formData, setFormData ] = React.useState(
         { firstname: '', lastname: '', zipcode: '', email: '', password: '' }
     )
+    
+    const { loading, error } = useSelector((state)=>state.user)
 
     function updateData(event){
         const { name, value } = event.target;
@@ -20,19 +27,30 @@ export default function Signup() {
 
     async function submitData(event){
         event.preventDefault()
-        const res = await fetch('/api/auth/signup', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
+        try{
+            dispatch(signinStart())
+            const res = await fetch('/api/auth/signup', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            const data = await res.json()
+            // console.log(data)
 
-        const data = await res.json()
-        console.log(data)
+            if(data.success === false){
+                dispatch(signinFailure(data.message))
+                return
+            }
+            dispatch(signinSuccess(data))
+            navigate('/')
+        }
+        catch(err){
+            dispatch(signinFailure(err))
+        }
     }
     
-    console.log(formData)
 
       
   return (
@@ -61,7 +79,8 @@ export default function Signup() {
                     <input type='number' className='signup-input' placeholder='Zip Code' pattern="[0-9]{6}" onChange={updateData} name='zipcode' value={formData.zip} />
                     <input type='email' className='signup-input' placeholder='Email' onChange={updateData} name='email' value={formData.email} />
                     <input type='password' className='signup-input' placeholder='Password' onChange={updateData} name='password' value={formData.password} />
-                    <div onClick={submitData} className='signup-button'>Create account</div>
+                    {error && <p style={{color: 'red', marginTop: '20px'}}>{error}</p>}
+                    <div disable={loading} onClick={submitData} className='signup-button'>{loading? "Loading..." : "Create account" }</div>
 
                     <p className='signup-p'>By signing up, or continuing with Facebook or Google,<br />
                     you agree to the GrocerBlink <Link to='/'><span style={{textDecoration: 'underline'}}>Terms of Service</span></Link></p>
