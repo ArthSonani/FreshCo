@@ -1,51 +1,51 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    user: null,
-    error: null,
-    loading: false
+  loading: false,
+  error: null,
+  user: null, 
 }
 
 const userSlice = createSlice({
-    name: 'user',
-    initialState,
-    reducers: {
-        signinStart: (state)=>{
-            state.loading = true;
-        },
-        signinSuccess: (state, action)=>{
-            state.user = action.payload;
-            state.loading = false;
-            state.error = null;
-        },
-        signinFailure: (state, action)=>{
-            state.loading = false;
-            state.error = action.payload;
-        },
+  name: 'user',
+  initialState,
+  reducers: {
+    userSigninStart(state) {
+      state.loading = true
+      state.error = null
+    },
+    userSigninSuccess(state, action) {
+      state.loading = false
+      state.user = action.payload
+    },
+    userSigninFailure(state, action) {
+      state.loading = false
+      state.error = action.payload
+    },
 
-        signOutStart: (state)=>{
-            state.loading = true;
-        },
-        signOutSuccess: (state)=>{
-            state.user = null;
-            state.loading = false;
-            state.error = null;
-        },
-        signOutFailure: (state, action)=>{
-            state.loading = false;
-            state.error = action.payload;
-        }
+    userSignoutStart: (state)=>{
+        state.loading = true;
+    },
+    userSignoutSuccess: (state)=>{
+        state.user = null;
+        state.loading = false;
+        state.error = null;
+    },
+    userSignoutFailure: (state, action)=>{
+        state.loading = false;
+        state.error = action.payload;
     }
+  },
 })
 
 
 export const { 
-    signinStart, 
-    signinSuccess, 
-    signinFailure, 
-    signOutStart, 
-    signOutSuccess, 
-    signOutFailure 
-} = userSlice.actions;
+    userSigninStart, 
+    userSigninSuccess, 
+    userSigninFailure, 
+    userSignoutStart, 
+    userSignoutSuccess, 
+    userSignoutFailure 
+} = userSlice.actions
 
-export default userSlice.reducer;
+export default userSlice.reducer

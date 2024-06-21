@@ -2,8 +2,10 @@ import express from 'express'
 import mongoose from 'mongoose'
 import { mongodbURL, PORT } from './config.js'
 import dotenv from 'dotenv'
-import userRouter from './routes/user_route.js'
-import authRouter from './routes/auth_route.js'
+
+import userAuthRouter from './routes/user_auth_route.js'
+import vendorAuthRouter from './routes/vendor_auth_route.js'
+import productRouter from './routes/product_route.js'
 
 dotenv.config()
 
@@ -17,8 +19,13 @@ mongoose.connect(mongodbURL).then(()=>{
 const app = express();
 app.use(express.json());
 
-app.use('/api/user', userRouter);
-app.use('/api/auth', authRouter);
+app.use('/api/user/auth', userAuthRouter);
+app.use('/api/vendor/auth', vendorAuthRouter);
+app.use('/api/inventory', productRouter);
+
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Proxy is working' });
+});
 
 
 

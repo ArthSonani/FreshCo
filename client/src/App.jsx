@@ -4,8 +4,11 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Home from './pages/Home'
 import Navbar from './components/Navbar';
-import Signup from './pages/Signup'
-import Signin from './pages/Signin';
+import UserSignup from './pages/UserSignup';
+import UserSignin from './pages/UserSignin';
+import VendorSignin from './pages/VendorSignin';
+import VendorSignup from './pages/VendorSignup';
+import Inventory from './pages/Inventory';
 
 
 export default function App() {
@@ -15,8 +18,11 @@ export default function App() {
 
       <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Signup" element={<Signup />} />
-          <Route path="/signin" element={<Signin />} />
+          <Route path="/user/signup" element={<UserSignup />} />
+          <Route path="/user/signin" element={<UserSignin />} />
+          <Route path="/vendor/signin" element={<VendorSignin />} />
+          <Route path="/vendor/signup" element={<VendorSignup />} />
+          <Route path='/inventory' element={<Inventory />} />
       </Routes>
     </BrowserRouter>
   );
