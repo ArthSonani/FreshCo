@@ -102,7 +102,7 @@ export default function Navbar() {
           <div className="offcanvas-body">
             {currentUser?
               (<>
-                <div>Store</div>
+                <div onClick={()=>navigate('/shop')}>Store</div>
                 <div>Cart</div>
                 <div>Orders</div>
                 <div>Shopes</div>
@@ -111,7 +111,7 @@ export default function Navbar() {
               </>) : 
               currentVendor?
               (<>
-                <div onClick={navigate('/inventory')} >Inventory</div>
+                <div onClick={()=>navigate('/inventory')} >Inventory</div>
                 <div onClick={ openAddProduct }>Add new product</div>
                 <div onClick={ deleteProduct }>Delete products</div>
                 <div onClick={ updateProduct }>Update inventory</div>

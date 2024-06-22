@@ -20,17 +20,22 @@ export default function Inventory() {
             const productElement = document.getElementById(productId);
             const productPrice = productElement.querySelector('.product-price');
             const updateProduct = productElement.querySelector('.update-product');
-            const itemDone = productElement.querySelector('item-done')
-            const itemEdit = productElement.querySelector('item-edit')
-            console.log(productElement, productPrice, updateProduct, itemDone, itemEdit)
-          
+            const itemDone = productElement.querySelector('.item-done')
+            const itemEdit = productElement.querySelector('.item-edit')
+            const itemDelete = productElement.querySelector('.item-delete')
+            
+            itemEdit.classList.add('hide-edit')
+            itemEdit.classList.remove('item-edit')
+
+            itemDelete.classList.add('hide-delete')
+            itemDelete.classList.remove('item-delete')
+        
             productPrice.style.display = 'none';
             updateProduct.style.display = 'flex';
-            itemEdit.style.display = 'none';
-            itemDone.style.display = 'inline-block'
+            itemDone.style.display = 'grid'
           
-            const saveButton = document.querySelector('.save-button-container');
-            saveButton.style.display = 'flex';
+            // const saveButton = document.querySelector('.save-button-container');
+            // saveButton.style.display = 'flex';
     }
 
     //save button on change
@@ -137,8 +142,6 @@ export default function Inventory() {
         }
     }
 
-    console.log(loading)
-
     async function getInventoryData(){
         try{
             const res = await fetch('/api/inventory/data',{
@@ -176,6 +179,7 @@ export default function Inventory() {
                 image={product.image} 
                 quantity={product.quantity}
                 onEdit={editProduct}
+                reload={getInventoryData}
             />
         )
     })

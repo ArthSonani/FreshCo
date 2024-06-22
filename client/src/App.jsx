@@ -9,6 +9,7 @@ import UserSignin from './pages/UserSignin';
 import VendorSignin from './pages/VendorSignin';
 import VendorSignup from './pages/VendorSignup';
 import Inventory from './pages/Inventory';
+import Shop from './pages/Shop';
 
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/vendor/signin" element={<VendorSignin />} />
           <Route path="/vendor/signup" element={<VendorSignup />} />
           <Route path='/inventory' element={<Inventory />} />
+          <Route path='/shop' element={<Shop />} />
       </Routes>
     </BrowserRouter>
   );
