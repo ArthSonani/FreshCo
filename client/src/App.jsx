@@ -6,10 +6,11 @@ import Home from './pages/Home'
 import Navbar from './components/Navbar';
 import UserSignup from './pages/UserSignup';
 import UserSignin from './pages/UserSignin';
-import VendorSignin from './pages/VendorSignin';
+import VendorSignin from './pages/VendorSignin'; 
 import VendorSignup from './pages/VendorSignup';
 import Inventory from './pages/Inventory';
 import Shop from './pages/Shop';
+import StoreProducts from './pages/StoreProducts';
 
 
 export default function App() {
@@ -24,7 +25,8 @@ export default function App() {
           <Route path="/vendor/signin" element={<VendorSignin />} />
           <Route path="/vendor/signup" element={<VendorSignup />} />
           <Route path='/inventory' element={<Inventory />} />
-          <Route path='/shop' element={<Shop />} />
+          <Route path='/shop/:category' element={<Shop />} />
+          <Route path='/store/:storeId' element={<StoreProducts />} />
       </Routes>
     </BrowserRouter>
   );

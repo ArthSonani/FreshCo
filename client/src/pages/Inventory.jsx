@@ -125,8 +125,6 @@ export default function Inventory() {
             });
 
             const data = await res.json()
-            console.log("response")
-            console.log(data)
 
             if(data.success === false){
                 console.log(data.message)

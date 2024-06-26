@@ -10,14 +10,25 @@ const vendorSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    email: {
+    logo: {
         type: String,
-        required: true,
-        unique: true
+        require: true
+    },
+    area: {
+        type: String,
+        require: true
     },
     zipcode: {
         type: Number,
         require: true
+    },
+    categories: [{
+        type: String
+    }],
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
     password: {
         type: String,

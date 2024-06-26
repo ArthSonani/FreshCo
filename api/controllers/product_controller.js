@@ -1,5 +1,5 @@
 import Product from '../models/product_model.js'
-import Vendor from '../models/vendor_model.js';
+import Vendor from '../models/vendor_model.js'
 import { errorHandler } from '../utils/error.js'
 
 export const add = async (req, res, next) => {

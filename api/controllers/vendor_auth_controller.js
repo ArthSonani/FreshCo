@@ -5,17 +5,16 @@ import jwt from 'jsonwebtoken'
 
 
 export const signup = async (req, res, next)=>{
-    const { name, businessname, email, zipcode, password } = req.body;
+    const { name, businessname, area, categories, logo, email, zipcode, password } = req.body;
     const hasedPass = bcryptjs.hashSync(password, 10)
     if (password === "") return next(errorHandler(401, "Must Provide Password!"))
-    const newVendor = new Vendor({name, businessName: businessname, email, zipcode, password: hasedPass, products: []})
+    const newVendor = new Vendor({name, businessName: businessname, email, logo, area, categories, zipcode, password: hasedPass, products: []})
     try{
         await newVendor.save()
         const validVendor = await Vendor.findOne({email}) 
         const token = jwt.sign({id: validVendor._id}, process.env.JWT_SECRET)
         const { password: pass, ...rest } = validVendor._doc
         res.cookie('access_token_vendor', token, {httpOnly: true}).status(200).json(rest)
-        
     }catch(err){
         next(err);
     }
@@ -32,7 +31,6 @@ export const signin = async (req, res, next)=>{
         const token = jwt.sign({id: validVendor._id}, process.env.JWT_SECRET)
         const { password: pass, ...rest } = validVendor._doc
         res.cookie('access_token_vendor', token, {httpOnly: true}).status(200).json(rest)
-
     }
     catch(err){
         next(err)

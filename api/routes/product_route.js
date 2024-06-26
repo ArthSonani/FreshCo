@@ -8,4 +8,4 @@ router.post('/data', getData)
 router.post('/update', update)
 router.post('/remove', remove)
 
-export default router
+export default router;

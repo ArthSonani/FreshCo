@@ -9,7 +9,7 @@ export default function Signup() {
     const dispatch = useDispatch()
 
     const [ formData, setFormData ] = React.useState(
-        { firstname: '', lastname: '', email: '', zipcode: '', password: '' }
+        { firstname: '', lastname: '', email: '', zipcode: '', password: '', c_password: '' }
     )
     
     const { loading, error } = useSelector(state =>state.user)
@@ -44,7 +44,7 @@ export default function Signup() {
                 return
             }
             dispatch(userSigninSuccess(data))
-            navigate('/')
+            navigate('/shop/all-stores')
         }
         catch(err){
             dispatch(userSigninFailure(err))
@@ -79,9 +79,11 @@ export default function Signup() {
                     <input type='number' className='signup-input' placeholder='Zip Code' pattern="[0-9]{6}" onChange={updateData} name='zipcode' value={formData.zipcode} />
                     <input type='email' className='signup-input' placeholder='Email' onChange={updateData} name='email' value={formData.email} />
                     <input type='password' className='signup-input' placeholder='Password' onChange={updateData} name='password' value={formData.password} />
-                    {error && <p style={{color: 'red', marginTop: '20px'}}>{JSON.stringify(error)}</p>}
-                    <div disable={loading? 'true' : 'undefined'} onClick={submitData} className='signup-button'>{loading? "Loading..." : "Create account" }</div>
-
+                    <input type='password' className='signup-input' placeholder='Confirm Password' onChange={updateData} name='c_password' value={formData.c_password} />
+                    <div className='button-container'>
+                        {error && <p style={{color: 'red', marginTop: '20px'}}>{JSON.stringify(error)}</p>}
+                        <div disable={loading? 'true' : 'undefined'} onClick={submitData} className='signup-button'>{loading? "Loading..." : "Create account" }</div>
+                    </div>
                     <p className='signup-p'>By signing up, or continuing with Facebook or Google,<br />
                     you agree to the GrocerBlink <Link to='/'><span style={{textDecoration: 'underline'}}>Terms of Service</span></Link></p>
                 </form>
