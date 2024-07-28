@@ -51,14 +51,12 @@ export default function Signin() {
 
     }
 
-    // console.log(useSelector((state)=>state.user.user))
-
 
   return (
     <main className='signup-main'>
     <div className='signup-page'>
         <div className='signup-head'>
-            <h1>Vendor Sign in</h1>
+            <h1>Sign in to your store</h1>
             <h5>New to GrocerBlink? <Link className='signin-link' to='/vendor/signup'>Signup</Link></h5>
             <div className='signup-option'>
                 <div style={{width: '20%'}} className='signup-option-div'><img src="/facebook.png" alt="Facebook" width="25" /></div>
@@ -79,7 +77,7 @@ export default function Signin() {
                 <input type='password' className='signup-input' placeholder='Password' name='password' onChange={updateData} value={formData.password} />
                 <div className='button-container'>
                     {error && <p style={{color: 'red', marginTop: '20px'}}>{JSON.stringify(error)}</p>}
-                    <div disable={loading? 'true' : 'undefined'} className='signup-button' onClick={submitData}>{loading? <><span class="spinner-border spinner-border-sm" aria-hidden="true" style={{marginRight: '5px'}}> </span> Loading...</> : "Sign in"}</div>
+                    <div disable={loading? 'true' : 'undefined'} className='signup-button' onClick={submitData}>{loading? <><span className="spinner-border spinner-border-sm" aria-hidden="true" style={{marginRight: '5px'}}> </span> Loading...</> : "Sign in"}</div>
                 </div>
                 <p className='signup-p'>By signing up, or continuing with Facebook or Google,<br />
                 you agree to the GrocerBlink <Link to='/'><span style={{textDecoration: 'underline'}}>Terms of Service</span></Link></p>

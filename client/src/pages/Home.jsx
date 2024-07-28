@@ -1,12 +1,7 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-// import Loader from '../components/Loader'
-import Product from '../components/Product'
-import { useNavigate } from 'react-router-dom'
+import homeIntro from '../assets/home-intro.png'
 
 export default function Home() {
-
-    const navigate = useNavigate();
 
   return (
       <section>
@@ -15,12 +10,16 @@ export default function Home() {
             we have come with your grocery
           </h1>
           <p>Whatever you want from local stores, brought right to your door.</p>
+          <div className='home-shop'>
+            <img src={homeIntro}/>
+          </div>
+          
         </div>
-        {/* <div className='products'>
-          <Product />
-          <Product />
-          <Product />
-        </div> */}
+        
       </section>
   )
 }
+
+// 1. #81523F
+// 2. #B68363
+// 3. #DCCBC5

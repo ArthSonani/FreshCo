@@ -1,159 +1,142 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'
-import { userSignoutSuccess, userSignoutStart, userSignoutFailure } from '../redux/user/userSlice';
-import { vendorSignoutStart, vendorSignoutSuccess, vendorSignoutFailure } from '../redux/vendor/vendorSlice';
+import { useNavigate, useLocation, matchPath, useParams } from 'react-router-dom'
+import { updateUser } from '../redux/user/userSlice';
+import Cart from './Cart';
+import Sidebar from './Sidebar'
+import logo from '../assets/logo.png'
 
 
 export default function Navbar() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const params = useParams()
 
-    const currentUser = useSelector((state)=>state.user.user)
-    const currentVendor = useSelector((state)=>state.vendor.vendor)
+  const currentUser = useSelector((state) => state.user.user)
+  const currentVendor = useSelector((state) => state.vendor.vendor)
+  const isActive = (path) => !!matchPath({ path, end: true }, location.pathname);
 
-    const handleUserSignOut = async()=>{
-      try{
-        dispatch(userSignoutStart())
-        const res = await fetch('/api/user/auth/signout')
-        const data = res.json()
-        if(data.success === false){
-          dispatch(userSignoutFailure(data.message))
-          return
-        }
-        dispatch(userSignoutSuccess())
-        navigate('/')
+  const [zipData, setZipData] = React.useState({
+    zip: currentUser ? currentUser.zipcode : "", area: currentUser ? currentUser.area : "", userId: currentUser ? currentUser._id : ""
+  })
+
+  const [ search, setSearch ] = React.useState("")
+
+  function updateData(event) {
+    const { name, value } = event.target
+
+    setZipData((preData) => {
+      return {
+        ...preData,
+        [name]: value
       }
-      catch(err){
-        dispatch(userSignoutFailure(err))
+    })
+  }
+
+
+  async function setZip(event) {
+    event.preventDefault()
+    try {
+      const res = await fetch('/api/user/auth/update-zip', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(zipData)
+
+      })
+      const data = await res.json()
+
+      if (data.success === false) {
+        console.log(data.message)
+        return
       }
+      dispatch(updateUser(data[0]))
+      window.location.reload()
     }
-
-    const handleVendorSignOut = async()=>{
-      try{
-        dispatch(vendorSignoutStart())
-        const res = await fetch('/api/vendor/auth/signout')
-        const data = res.json()
-        if(data.success === false){
-          dispatch(vendorSignoutFailure(data.message))
-          return
-        }
-        dispatch(vendorSignoutSuccess())
-        navigate('/')
-      }
-      catch(err){
-        dispatch(vendorSignoutFailure(err))
-      }
+    catch (err) {
+      console.log(err)
     }
+  }
 
-    function openAddProduct(){
-      const addNew = document.querySelector('.add-new')
-      addNew.style.display = 'grid'
+  function handleSearch(e){
+    e? e.preventDefault() : null
+    const urlParams = new URLSearchParams(window.location.search)
+    if (search === '') {
+      urlParams.delete('search');
+    } else {
+      urlParams.set('search', search)
     }
+    const searchQuery = urlParams.toString()
+    navigate(`/shop/all-stores?${searchQuery}`)
+  }
 
-    function deleteProduct(){
-      const deleteIcon = document.querySelectorAll('.item-delete')
-      deleteIcon.forEach((item)=>{
-        item.style.display = 'inline'
-      })
-      const saveButton = document.querySelector('.save-button-container')
-      saveButton.style.display = 'flex'
+  useEffect(()=>{
+    if (location.pathname === '/shop/all-stores') {
+      handleSearch();
     }
+  }, [search, location.pathname])
 
-    function updateProduct(){
-      const resize = document.querySelectorAll('.product')
-      const removeThing = document.querySelectorAll('.product-price')
-      const addThing = document.querySelectorAll('.update-product')
-
-      resize.forEach((item)=>{
-        item.style.height = '300px'
-        item.style.width = '220px'
-      })
-      removeThing.forEach((item)=>{
-        item.style.display = 'none'
-      })
-      addThing.forEach((item)=>{
-        item.style.display = 'flex'
-      })
-      const saveButton = document.querySelector('.save-button-container')
-      saveButton.style.display = 'flex'
-    }
+  function openAddProduct() {
+    document.querySelector('.add-new').style.display = 'grid'
+  }
 
   return (
     <nav className='navbar'>
 
       <div className='nav-first'>
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="#343538" xmlns="http://www.w3.org/2000/svg" size="24" color="systemGrayscale70" aria-hidden="true" data-bs-toggle="offcanvas" aria-controls="offcanvasWithBothOptions" data-bs-target="#offcanvasWithBothOptions">
-          <path d="M20 6H4v2h16zM4 11h16v2H4zM4 16h16v2H4z"></path>
-        </svg>
+        <span className="material-symbols-outlined click-button" data-bs-toggle="offcanvas" aria-controls="offcanvasWithBothOptions" data-bs-target="#offcanvasWithBothOptions">menu</span>
+        <Sidebar />
 
-        <div className="offcanvas offcanvas-start" style={{ width: "300px" }} data-bs-scroll="true" tabIndex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-          <div className="offcanvas-header">
-            <h5 className="offcanvas-title nav-logo-name" id="offcanvasWithBothOptionsLabel" onClick={ ()=>navigate('/') }>
-              {currentUser? 
-                <><span className="material-symbols-outlined">person</span> {currentUser.firstname} </> : 
-              currentVendor? 
-                <><span className="material-symbols-outlined">storefront</span> {currentVendor.businessName} </> : 
-              "GrocerBlink"}
-            </h5>
-          </div>
-          <hr style={{margin: '0', width: '90%'}}/>
-          
-          <div className="offcanvas-body">
-            {currentUser?
-              (<>
-                <div onClick={()=>navigate('/shop/all-stores')}>Store</div>
-                <div>Cart</div>
-                <div>Orders</div>
-                <div>Shopes</div>
-                <div>Manage Account</div>
-                <div onClick={ handleUserSignOut }>Log out</div>
-              </>) : 
-              currentVendor?
-              (<>
-                <div onClick={()=>navigate('/inventory')} >Inventory</div>
-                <div onClick={ openAddProduct }>Add new product</div>
-                <div onClick={ deleteProduct }>Delete products</div>
-                <div onClick={ updateProduct }>Update inventory</div>
-                <div>Manage Account</div>
-                <div onClick={ handleVendorSignOut }>Log out</div>
-              </>) :
-              (<>
-              <div className='' onClick={ ()=>navigate('/user/signin') }>Log in</div>
-              <div className='' onClick={ ()=>navigate('/user/signup') }>Sign up</div>
-              <div className='' onClick={ ()=>navigate('/vendor/signup') }>Become a Merchant</div>
-              </>)}
-          </div>
+        <div className='nav-logo-name click-button' onClick={() => navigate('/')}>
+          <img src={logo} style={{ height: '30px' }} /> GrocerBlink
         </div>
 
-        <h1 className='nav-logo-name' onClick={ ()=>navigate('/') }>
-          <img src='/logo.png' style={{height: '30px'}}/>
-          GrocerBlink</h1>
       </div>
 
-      <div className='nav-search'>
-        <form className='nav-form'>
-          <span className="material-symbols-outlined">search</span>
-          <input type='text' className='nav-form-input' placeholder='Search products and stores'></input>
-        </form>
-      </div>
+      {isActive('/shop/:category') || isActive('/store/:storeId')? 
+        (<div className='nav-search'>
+          <form className='nav-form' onSubmit={handleSearch}>
+            <span className="material-symbols-outlined search-icon">search</span>
+            <input type='text' placeholder='Search products and stores' value={search} onChange={(e)=>setSearch(e.target.value)}/>
+          </form>
+        </div>) 
+        
+      : null}
 
       <div className='nav-last'>
-        {currentUser? 
-          <span className="material-symbols-outlined">shopping_cart</span> : 
-          currentVendor? <span className="material-symbols-outlined">inventory</span> : 
-          (
-          <>
-          <div className='nav-link' onClick={ ()=>navigate('/user/signin') }><span className="material-symbols-outlined">login</span>Log in</div>
-          <div className='nav-link' onClick={ ()=>navigate('/user/signup') }><span className="material-symbols-outlined">person</span>Sign up</div>
-          </>
-        )}
-        
+        {currentUser ?
+          (<>
+            {isActive('/') || isActive('/shop/:category') ?
+              <span className='nav-zip click-button'>
+                <span className='nav-zip-logo dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                  <span className="material-symbols-outlined">home_pin</span>{currentUser.zipcode}
+                </span>
+
+                <div className='nav-zip-form-container dropdown-menu' style={{ marginTop: '10px', left: '-50%' }}>
+                  <form className='nav-zip-form'>
+                    <input type='text' className='nav-form-area' value={zipData.area} name='area' onChange={updateData} />
+                    <div className='zip-form-container'>
+                      <input type='number' className='nav-zip-input number-input' name='zip' onChange={updateData} value={zipData.zip} />
+                      <button className='nav-form-button' onClick={setZip}>set</button>
+                    </div>
+                  </form>
+                </div>
+              </span>
+
+              : ''}
+
+            <Cart />
+
+          </>) :
+          currentVendor ?
+            (<><span className="material-symbols-outlined" onClick={openAddProduct}>note_stack_add</span>
+              <span className="material-symbols-outlined">manage_accounts</span></>) :
+            (<>
+              <div className='nav-link click-button' onClick={() => navigate('/user/signin')}><span className="material-symbols-outlined">login</span>Log in</div>
+              <div className='nav-link click-button' onClick={() => navigate('/user/signup')}><span className="material-symbols-outlined">person</span>Sign up</div>
+            </>)}
       </div>
-
-    </nav>
-  )
+    </nav>)
 }
-
-
-

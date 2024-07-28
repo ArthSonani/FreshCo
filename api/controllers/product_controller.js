@@ -1,22 +1,23 @@
 import Product from '../models/product_model.js'
-import Vendor from '../models/vendor_model.js'
+import Store from '../models/store_model.js'
+import Cart from '../models/cart_model.js'
 import { errorHandler } from '../utils/error.js'
 
 export const add = async (req, res, next) => {
 
-    const { name, image, price, quantity, category, description, vendorId } = req.body;
+    const { name, image, price, quantity, stock, mainCategory, subCategory, description, storeId } = req.body;
 
-    if (!name || !image || !price || !quantity || !category || !description) {
+    if (!name || !image || !price || !quantity || !description) {
         return res.status(400).json({ message: 'name fields are required' });
     }
 
-    const newProduct = new Product({ name, image, price, quantity, category, description, vendorId });
+    const newProduct = new Product({ name, image, price, quantity, inStock: stock, subCategory, mainCategory, description, storeId });
     const productId = newProduct._id;
 
     try {
         await newProduct.save();
-        await Vendor.findByIdAndUpdate(
-                vendorId,
+        await Store.findByIdAndUpdate(
+                storeId,
                 { $push: { products: productId } },
                 { new: true, useFindAndModify: false }
             )
@@ -28,13 +29,13 @@ export const add = async (req, res, next) => {
 };
 
 export const getData = async (req, res, next) => {
-    const { vendorId } = req.body;
+    const { storeId } = req.body;
 
     try{
-        const vendor = await Vendor.findOne({ _id: vendorId })
-        const vendorProductIds = vendor.products
-        const vendorProducts = await Product.find({_id : { $in: vendorProductIds}})
-        res.status(200).json({message: "succsesfully fetched products!" , vendorProducts})
+        const store = await Store.findOne({ _id: storeId })
+        const storeProductIds = store.products
+        const storeProducts = await Product.find({_id : { $in: storeProductIds}})
+        res.status(200).json({message: "succsesfully fetched products!" , storeProducts})
     }
     catch(err){
         next(err)
@@ -54,13 +55,24 @@ export const update = async (req, res, next) => {
 }
 
 export const remove = async (req, res, next) => {
-    const { productId } = req.body;
+    const { productId, storeId } = req.body;
 
     try{
         await Product.deleteOne({_id: productId})
+
+        await Cart.updateMany(
+            { 'products.product': productId },
+            { $pull: { products: { product: productId } } }
+        );
+
+        await Store.updateOne(
+            { _id: storeId },
+            { $pull: { products: productId } }
+        );
+
         res.status(200).json({message: "Product Deleted succsesfully!"})
     }
     catch(err){
-        next(err)
+        next(err)  
     }
 }

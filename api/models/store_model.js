@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const vendorSchema = new mongoose.Schema({
+const storeSchema = new mongoose.Schema({
 
     name: {
         type: String,
@@ -41,7 +41,7 @@ const vendorSchema = new mongoose.Schema({
 
   }, { timestamps: true } );
 
-const Vendor = mongoose.model('Vendor', vendorSchema);
+const Store = mongoose.model('Store', storeSchema);
 
-export default Vendor;
+export default Store;
   

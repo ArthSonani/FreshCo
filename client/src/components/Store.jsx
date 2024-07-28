@@ -6,7 +6,7 @@ export default function Store(props) {
   const navigate = useNavigate()
 
   return (
-    <div className='store-container' onClick={()=>{navigate(`/store/${props.id}`)}}>
+    <div className='store-container click-button' onClick={()=>{navigate(`/store/${props.id}`)}}>
         <div className='store-image'>
             <img className='store-img' src={props.logo} />
         </div>

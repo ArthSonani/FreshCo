@@ -1,18 +1,22 @@
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
-    vendorId: { 
+    storeId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Vendor', 
+        ref: 'Store', 
         required: true 
     },
     name: { 
         type: String, 
         required: true 
     },
-    category: { 
+    mainCategory: { 
         type: String, 
         required: true 
+    },
+    subCategory: {
+        type: String,
+        require: true
     },
     description: { 
         type: String, 
@@ -22,9 +26,14 @@ const productSchema = new mongoose.Schema({
         type: Number, 
         required: true 
     },
-    quantity: { 
+    quantity: {
+        type: String,
+        require: true
+    },
+    inStock: { 
         type: Number,  
-        default: 0 
+        default: 0, 
+        require: true
     },
     image: { 
         type: String,

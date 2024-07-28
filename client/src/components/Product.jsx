@@ -37,15 +37,15 @@ export default function Product(props) {
         const productElement = document.getElementById(props.id);
         const productPrice = productElement.querySelector('.product-price');
         const updateProduct = productElement.querySelector('.update-product');
-        const itemDone = productElement.querySelector('.item-done')
+        const itemDone = productElement.querySelector('.product-done')
         const itemEdit = productElement.querySelector('.hide-edit')
         const itemDelete = productElement.querySelector('.hide-delete')
                 
-        itemEdit.classList.add('item-edit')
+        itemEdit.classList.add('product-edit')
         itemEdit.classList.remove('hide-edit')
 
 
-        itemDelete.classList.add('item-delete')
+        itemDelete.classList.add('product-delete')
         itemDelete.classList.remove('hide-delete')
             
         productPrice.style.display = 'block';
@@ -65,7 +65,7 @@ export default function Product(props) {
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({productId: props.id})
+          body: JSON.stringify({productId: props.id, storeId: props.store})
       })
 
       const data = await res.json()
@@ -84,21 +84,21 @@ export default function Product(props) {
     <div className='product' id={props.id}>
         <div className='product-image'>
           <img src={props.image} /> 
-          <span className="material-symbols-outlined item-done" onClick={updateProduct} >check_circle</span>
-          <span className="item-edit material-symbols-outlined" onClick={()=>props.onEdit(props.id)}>Edit</span>
-          <span className="item-delete material-symbols-outlined" onClick={removeProduct}>delete</span>
+          <span className="material-symbols-outlined product-done" onClick={updateProduct} >check_circle</span>
+          <span className="product-edit material-symbols-outlined" onClick={()=>props.onEdit(props.id)}>Edit</span>
+          <span className="product-delete material-symbols-outlined" onClick={removeProduct}>delete</span>
         </div>
         <div className='product-info'>
             <div className='product-price'>₹ {formData.price}</div>
             <div className='update-product'>
               <p>Quantity</p>
-              <div className='item-add-remove'>
-                  <span className="material-symbols-outlined item-remove">remove</span>
-                  <input type='number' onChange={updateFromData} name='quantity' className='item-quantity-feild' value={formData.quantity} />
-                  <span className="material-symbols-outlined item-add">add</span>
+              <div className='product-add-remove'>
+                  <span className="material-symbols-outlined product-remove">remove</span>
+                  <input type='number' onChange={updateFromData} name='quantity' className='product-quantity-feild number-input' value={formData.quantity} />
+                  <span className="material-symbols-outlined product-add">add</span>
               </div>
               <p>Price</p>
-              <input type='number' onChange={updateFromData} name='price' className='item-price-feild' value={formData.price} />
+              <input type='number' onChange={updateFromData} name='price' className='product-price-feild number-input' value={formData.price} />
             </div>
             <div className='product-name'>{props.name}</div>
 

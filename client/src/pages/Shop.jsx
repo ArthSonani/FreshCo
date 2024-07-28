@@ -3,27 +3,26 @@ import Store from '../components/Store'
 import Categories from '../components/Categories'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import resultNotFound from '../assets/search.png'
 
 export default function Shop() {
   const params = useParams()
+  const urlParams = new URLSearchParams(window.location.search)
   const currentUser = useSelector((state)=>state.user.user)
 
   const [ stores , setStores ] = React.useState([])
-  const [ category, setCatagory ] = React.useState(null)
 
   async function getNearStores(){
-    console.log(params.category)
     try{
       const res = await fetch('/api/shop/near-store', {
         method : 'POST',
-        headers : {
+        headers : { 
           'Content-Type': 'application/json'
         },
-        body : JSON.stringify({zipCode : currentUser.zipcode, filter: params.category})
+        body : JSON.stringify({zipCode : currentUser.zipcode, filter: params.category, search: urlParams.get('search') || ''})
       })
-
+      
       const data = await res.json()
-      console.log(data)
 
       if(data.success === false){
         console.log(data.message)
@@ -42,7 +41,7 @@ export default function Shop() {
 
   useEffect(()=>{
     getNearStores()
-  }, [params.category])
+  }, [params.category, urlParams.get('search')])
 
   const nearStoreData = stores.map((store)=>{
     return (
@@ -62,13 +61,19 @@ export default function Shop() {
     <div>
 
       <div className='store-heading'>
-        <h2>{params.category} near you</h2>
+        <h2>{params.category.replace(/-/g, ' ').replace(/\b\w/, char => char.toUpperCase())} in {currentUser.area}</h2>
       </div>
 
       <Categories />
 
+      {urlParams.get('search')? <h5 className='search-result'>Search result for '{urlParams.get('search')}'</h5> : null}
+
       <div className='stores-container'>
-        {nearStoreData}
+        {nearStoreData.length == 0? 
+        <div className='result-not-found'>
+          <img src={resultNotFound} />
+          <span>Result not found</span>
+        </div> : nearStoreData}
       </div>
         
     </div>

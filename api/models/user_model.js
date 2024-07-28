@@ -9,9 +9,24 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    
     zipcode: {
-        type: Number,
+        type: Number, 
         require: true
+    },
+    area: {
+        type: String,
+        require: true
+    },
+    address: {
+        type: String,
+        require: true,
+        default: null
+    },
+    phone: {
+        type: Number,
+        require: true,
+        default: null
     },
     email: {
         type: String,
