@@ -15,7 +15,7 @@ export const add = async (req, res, next) => {
     const productId = newProduct._id;
 
     try {
-        await newProduct.save();
+        await newProduct.save(); 
         await Store.findByIdAndUpdate(
                 storeId,
                 { $push: { products: productId } },
@@ -29,12 +29,17 @@ export const add = async (req, res, next) => {
 };
 
 export const getData = async (req, res, next) => {
-    const { storeId } = req.body;
+    const { storeId, search } = req.body;
 
     try{
+        const searchTerm = search === null ? '' : search
+
         const store = await Store.findOne({ _id: storeId })
         const storeProductIds = store.products
-        const storeProducts = await Product.find({_id : { $in: storeProductIds}})
+        const storeProducts = await Product.find({
+            _id : { $in: storeProductIds}, 
+            name: { $regex: searchTerm, $options: 'i' }
+        })
         res.status(200).json({message: "succsesfully fetched products!" , storeProducts})
     }
     catch(err){
@@ -43,10 +48,10 @@ export const getData = async (req, res, next) => {
 }
 
 export const update = async (req, res, next) => {
-    const { price, quantity, productId } = req.body;
+    const { price, inStock, productId } = req.body;
 
     try{
-        await Product.updateOne({_id: productId}, {$set:{price: price, quantity: quantity}})
+        await Product.updateOne({_id: productId}, {$set:{price: price, inStock: inStock}})
         res.status(200).json({message: "Product Updated succsesfully!"})
     }
     catch(err){

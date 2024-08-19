@@ -1,15 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Item from '../components/Item';
 import { useParams } from 'react-router-dom'
 import { categoriesData } from '../categoriesData.js'
-import productNotFound from '../assets/not-found.png'
+import product404 from '../assets/product404.svg'
+import { CartContext } from '../context/CartContext.jsx';
 
 export default function StoreProducts() {
 
   const params = useParams();
+  const { activeCart } = useContext(CartContext)
+  const urlParams = new URLSearchParams(window.location.search)
   const [ products, setproducts ] = React.useState([])
   const [ store, setStore ] = React.useState(null)
   const [ category, setCategory ] = React.useState('shop-all')
+
 
   async function getStoreData(){
     try{
@@ -18,7 +22,7 @@ export default function StoreProducts() {
         headers : {
           'Content-Type' : 'application/json'
         },
-        body : JSON.stringify({storeId : params.storeId, filter: category})
+        body : JSON.stringify({storeId : params.storeId, filter: category, search: urlParams.get('search')})
       })
 
       const data = await res.json()
@@ -39,18 +43,21 @@ export default function StoreProducts() {
 
   useEffect(()=>{
     getStoreData()
-  }, [params.storeId, category])
+  }, [params.storeId, category, urlParams.get('search'), activeCart])
 
   const productsOfStore = products.map((product)=>{
     return(
       <Item 
-        key={product._id}
+        key={product._id}   
+        store={params.storeId}
         id={product._id}
         price={product.price}
         name={product.name}
         image={product.image}
         description={product.description}
+        quantity={product.quantity}
         mainCat={product.mainCategory}
+        inStock={product.inStock}
         subCat={product.subCategory}
       />
     )
@@ -85,7 +92,12 @@ export default function StoreProducts() {
           </div>
           <div className='store-front-name'>
             <h5>{store.businessName}</h5>
-            <p><span className="store-loc-icon material-symbols-outlined">location_on</span>{store.area}</p>
+            <p>
+            {store.categories[0]?<span>{store.categories[0]}</span> : null}
+            {store.categories[1]?<span>{store.categories[1]}</span> : null}
+            {store.categories[2]?<span>{store.categories[2]}</span> : null}
+            &&nbsp;More...
+            </p>
           </div>
         </div>
         <div className='store-categories-container'>
@@ -109,13 +121,14 @@ export default function StoreProducts() {
       </div> 
       <div className='store-products-right'>
         <div className='store-category-head'>
-          {category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ')}
+        <h3>{category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ').replace(/main/, '')}</h3> 
+        {urlParams.get('search')? <h5>Search result for '{urlParams.get('search')}'</h5> : null}
         </div>
         <div className='products-container'>
           {productsOfStore.length === 0? 
             <div className='product-not-found'>
-              <img src={productNotFound} />
-              <div>Prduct not found</div>
+              <img src={product404} />
+              <div>Prducts not found</div>
             </div> : 
           productsOfStore}
         </div>

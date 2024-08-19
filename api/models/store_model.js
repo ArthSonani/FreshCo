@@ -10,9 +10,19 @@ const storeSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
+    phone: {
+        type: Number,
+        require: true,
+        default: null
+    },
     logo: {
         type: String,
-        require: true
+        require: true 
+    },
+    address: {
+        type: String,
+        require: true,
+        default: null
     },
     area: {
         type: String,
@@ -37,7 +47,13 @@ const storeSchema = new mongoose.Schema({
     products: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Product' 
-    }]
+    }],
+    orderCount: {
+        type: Number,
+        require: true,
+        default: 0
+    }
+
 
   }, { timestamps: true } );
 

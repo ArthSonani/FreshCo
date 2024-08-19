@@ -3,7 +3,7 @@ import Store from '../components/Store'
 import Categories from '../components/Categories'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import resultNotFound from '../assets/search.png'
+import resultNotFound from '../assets/search.svg'
 
 export default function Shop() {
   const params = useParams()
@@ -19,7 +19,7 @@ export default function Shop() {
         headers : { 
           'Content-Type': 'application/json'
         },
-        body : JSON.stringify({zipCode : currentUser.zipcode, filter: params.category, search: urlParams.get('search') || ''})
+        body : JSON.stringify({zipCode : currentUser.zipcode, filter: params.category, search: urlParams.get('search')})
       })
       
       const data = await res.json()
@@ -41,7 +41,7 @@ export default function Shop() {
 
   useEffect(()=>{
     getNearStores()
-  }, [params.category, urlParams.get('search')])
+  }, [params.category, urlParams.get('search'), currentUser.zipcode])
 
   const nearStoreData = stores.map((store)=>{
     return (
@@ -72,7 +72,7 @@ export default function Shop() {
         {nearStoreData.length == 0? 
         <div className='result-not-found'>
           <img src={resultNotFound} />
-          <span>Result not found</span>
+          <span>Stores not found</span>
         </div> : nearStoreData}
       </div>
         

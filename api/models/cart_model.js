@@ -30,3 +30,7 @@ const cartSchema = new mongoose.Schema({
   const Cart = mongoose.model('Cart', cartSchema);
   export default Cart;
 
+
+
+
+  // do not place order if user not updated address and password

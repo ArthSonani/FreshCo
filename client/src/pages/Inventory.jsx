@@ -1,15 +1,23 @@
 import React ,{ useEffect, useRef } from 'react'
 import Product from '../components/Product'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { app } from '../firebase'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { categoriesData } from '../categoriesData.js'
+import emptyInventory from '../assets/emptyInventory.svg'
+import loadingImg from '../assets/loading.svg'
+import inventory from '../assets/inventory.svg'
+import { useLocation } from 'react-router-dom'
 
 export default function Inventory() {
 
     const currentVendor = useSelector((state)=>state.vendor.vendor)
-    const navigate = useNavigate()
+    const location = useLocation(); // Hook to get location object
+    
+
+    // Extract search query from location
+    const searchQuery = new URLSearchParams(location.search).get('search');
+    
 
     // close button for add new product templete
     function closeAddProduct(){
@@ -18,22 +26,21 @@ export default function Inventory() {
     }
 
     function editProduct(productId){
-            const productElement = document.getElementById(productId);
-            const productPrice = productElement.querySelector('.product-price');
-            const updateProduct = productElement.querySelector('.update-product');
-            const itemDone = productElement.querySelector('.product-done')
-            const itemEdit = productElement.querySelector('.product-edit')
-            const itemDelete = productElement.querySelector('.product-delete')
-            
-            itemEdit.classList.add('hide-edit')
-            itemEdit.classList.remove('product-edit')
-
-            itemDelete.classList.add('hide-delete')
-            itemDelete.classList.remove('product-delete')
+        const productElement = document.getElementById(productId);
+        const productPrice = productElement.querySelector('.product-price');
+        const updateProduct = productElement.querySelector('.update-product');
+        const itemDone = productElement.querySelector('.product-done')
+        const itemEdit = productElement.querySelector('.product-edit')
+        const itemDelete = productElement.querySelector('.product-delete')
+        const productSubInfo = productElement.querySelector('.product-subinfo')
         
-            productPrice.style.display = 'none';
-            updateProduct.style.display = 'flex';
-            itemDone.style.display = 'grid'
+        itemEdit.style.display = 'none'
+        itemDelete.style.display = 'grid'
+        itemDone.style.display = 'grid'
+    
+        productSubInfo.style.display = 'none';
+        productPrice.style.display = 'none';
+        updateProduct.style.display = 'flex';
     }
 
 
@@ -120,7 +127,6 @@ export default function Inventory() {
                         console.log(`upload is ${progress}% done`)
                     },
                     (error)=>{
-                        // setError(error)
                         console.log(error)
                     },
                     ()=>{
@@ -148,7 +154,9 @@ export default function Inventory() {
                 return 
             }
             setLoading(false)
-            window.location.reload()
+            const addNew = document.querySelector('.add-new')
+            addNew.style.display = 'none'
+            getInventoryData()
         }
         catch(err){
             console.log(err)
@@ -162,7 +170,7 @@ export default function Inventory() {
                 headers: {
                     'Content-Type' : 'application/json'
                 },
-                body: JSON.stringify({'storeId': currentVendor._id})
+                body: JSON.stringify({storeId: currentVendor._id, search: searchQuery})
             })
 
             const data = await res.json()
@@ -178,37 +186,39 @@ export default function Inventory() {
     }
 
     useEffect(()=>{
+        console.log('called')
         getInventoryData()
-    }, [currentVendor._id])
+    }, [currentVendor, searchQuery])
     
 
-    const productCards = products.map((product)=>{
+    const productCards = products ? products.map((product)=>{
         return (
             <Product 
                 key={product._id}
                 id={product._id}
                 store={currentVendor._id}
-                price={product.price} 
-                name={product.name} 
-                image={product.image} 
-                quantity={product.quantity}
+                other={product}
                 onEdit={editProduct}
                 reload={getInventoryData}
             />
         )
-    })
+    }) : null
 
 
   return (
+    productCards == null? <div className='loading'> <img src={loadingImg} /></div> :
     <main>
         <div className='inventory-head'>
-            <h1>{currentVendor.businessName}'s Inventory</h1>
-        </div>
-        <div className='inventory-container'>
-            {productCards}
+            <h2>{currentVendor.businessName}'s Inventory</h2>
+            <p>Curate with Care, Sell with Pride—Your Inventory is the Heartbeat of Our Marketplace.</p>
+            <img src={inventory} />
         </div>
 
-        <div className='add-new'>
+        <div className={productCards.length != 0 ?'inventory-container' : 'inventory-container-with-img'}>
+            {productCards.length != 0 ? productCards : <><img src={emptyInventory} /> <span>Your inventory is empty</span></>}
+        </div>
+
+        <div className='add-new' >
 
             <div className='add-product-container'>
                 <span className="material-symbols-outlined close" onClick={closeAddProduct}>close</span>
@@ -237,7 +247,7 @@ export default function Inventory() {
                     <div className='add-new-right-bottom'>
                         <div className='new-main-cat'>
                             <h6 style={{color: 'black'}}>Main category</h6>
-                            {categoriesData.map((category, index) => (
+                            {categoriesData.filter(category => currentVendor.categories.includes(category.main)).map((category, index) => (
                                 <div  key={index}>
                                 <label>
                                     <input 

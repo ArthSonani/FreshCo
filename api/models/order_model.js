@@ -7,13 +7,18 @@ const orderSchema = new mongoose.Schema({
         ref: 'User', 
         required: true 
     },
+    store: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Store',
+        required: true
+    },
     products: [{
         product: { 
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'Product', 
             required: true 
         },
-        quantity: { 
+        quantityInCart: { 
             type: Number, 
             required: true 
         }
@@ -26,6 +31,10 @@ const orderSchema = new mongoose.Schema({
         type: String, 
         enum: ['pending', 'completed', 'cancelled'], 
         default: 'pending' 
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
      
 }, { timeseries: true } );

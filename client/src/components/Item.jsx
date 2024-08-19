@@ -1,128 +1,57 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { CartContext } from '../context/CartContext'
+import { ItemQtyContext } from '../context/ItemQtyContext'
+import { populate } from 'dotenv'
 
 export default function Item(props) {
 
   const currentUser = useSelector(state=>state.user.user)
   const params = useParams()
+  const { activeCart, getActiveCart } = useContext(CartContext)
+  const { getPreviousQty, updateCart, removeProduct } = useContext(ItemQtyContext)
 
-  const [ addtocart, setAddtocart ] = React.useState(true)
-  const [ cartcount, setCartcount ] = React.useState(false)
-  const [ deleteIcon, setDeleteIcon ] = React.useState(false)
-  const [ removeIcon, setRemoveIcon ] = React.useState(false)
   const [ count, setCount ] = React.useState(0)
 
 
   useEffect(()=>{
-    async function getPreviousQty(){
-      try{
-        const res = await fetch('/api/user/previous-qty',{
-          method : 'POST',
-          headers : {
-            'Content-Type' : 'application/json'
-          },
-          body : JSON.stringify({ user : currentUser._id, store: params.storeId, product : props.id })
-        })
 
-        const data = await res.json()
-
-        if(data.success === false){
-          console.log(data.message)
-          return
+    async function fetchPreviousQty() {
+      try {
+        const productQty = await getPreviousQty(currentUser._id, params.storeId, props.id);
+        if (productQty) {
+          setCount(productQty);
         }
-
-        setCount(data.qty)
-
+        else{
+          setCount(0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch previous quantity:', error);
       }
-      catch(err){
-        console.log(err)
-      }
     }
-    getPreviousQty()
+    fetchPreviousQty();
 
-  }, [])
+  }, [activeCart, currentUser._id, params.storeId]) 
 
-
-  async function updateCart(type){
-    try{
-      const res = await fetch('/api/user/update-cart',{
-        method : 'POST',
-        headers : {
-          'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({ user : currentUser._id, store: params.storeId, products: { product : props.id, quantityInCart : 1 }, type})
-      })
-
-      const data = await res.json()
-
-      if(data.success === false){
-        console.log(data.message)
-        return
-      }
-
-    }
-    catch(err){
-      console.log(err)
-    }
-  }
-
-  async function removeProduct(){
-    try{
-      setCount(0)
-      setDeleteIcon(false)
-      setRemoveIcon(true)
-      setCartcount(false)
-      setAddtocart(true)
-
-      const res = await fetch('/api/user/delete-cart-product',{
-        method : 'POST',
-        headers : {
-          'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({ user : currentUser._id, store: params.storeId, product: props.id})
-      })
-
-      const data = await res.json()
-
-      if(data.success === false){
-        console.log(data.message)
-        return
-      }
-
-    }
-    catch(err){
-      console.log(err)
-    }
-  }
-
+  
   useEffect(()=>{
-    if(count > 1){
-      setAddtocart(false)
-      setCartcount(true)
-      setRemoveIcon(true)
-      setDeleteIcon(false)
-    }
-    else if(count === 1){
-      setAddtocart(false)
-      setCartcount(true)
-      setRemoveIcon(false)
-      setDeleteIcon(true)
-    }
-    else{
-      setAddtocart(true)
-      setCartcount(false)
-    }
+    getActiveCart(currentUser._id, props.store)
   }, [count])
+
+  async function removeProductFromCart(){
+    setCount(0)
+    await removeProduct(currentUser._id, params.storeId, props.id)
+  }
 
   function handleQuantity(str){
     if(str === 'add'){
       setCount(count + 1)
-      updateCart(str)
+      updateCart(currentUser._id, params.storeId, { product : props.id, quantityInCart : 1 }, str)
     }
     else if(str === 'remove'){
       setCount(count - 1)
-      updateCart(str)
+      updateCart(currentUser._id, params.storeId, { product : props.id, quantityInCart : 1 }, str)
     }
   }
 
@@ -154,23 +83,23 @@ export default function Item(props) {
             <span className='item-description' onClick={()=>rotateCard(props.id)}>
               <span className="material-symbols-outlined">description</span>
             </span>
-            {addtocart && (
+            {count <= 0 ?
               <span className='item-add-container' onClick={()=>handleQuantity('add')}>
                 <span className="material-symbols-outlined item-add">add_circle</span>&nbsp;Add&nbsp;to&nbsp;cart
               </span>
-            )}
-            {cartcount && (
+            :
               <span className='cart-count-container'>
                 <span className="material-symbols-outlined item-add" onClick={()=>handleQuantity('add')}>add_circle</span>
                 {count}
-                {removeIcon && <span className="material-symbols-outlined item-add" onClick={()=>handleQuantity('remove')}>do_not_disturb_on</span>}
-                {deleteIcon && <span className="material-symbols-outlined item-add" onClick={()=>removeProduct()}>delete</span>}
+                {count == 1? <span className="material-symbols-outlined item-add" onClick={()=>removeProductFromCart()}>delete</span> : <span className="material-symbols-outlined item-add" onClick={()=>handleQuantity('remove')}>do_not_disturb_on</span>}
               </span>
-            )}
+            }
           </div>
           <div className='item-info'>
               <div className='item-price'>₹ {props.price}</div>
               <div className='item-name'>{props.name}</div>
+              <div className='item-in-stock'>{props.quantity}</div>
+              {props.inStock <= 10 ? props.inStock === 0? <div className='item-in-stock'>Out of stock</div> : <div className='item-in-stock'>Only {props.inStock} left</div> : null}
           </div>
         </div>
         <div className='item-back'>

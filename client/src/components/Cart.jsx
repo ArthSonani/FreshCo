@@ -1,22 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { matchPath, useNavigate } from 'react-router-dom'
+import toast, { Toaster } from 'react-hot-toast'
+
 import cartImage from '../assets/empty-cart.png'
+import { CartContext } from '../context/CartContext'
+import { ItemQtyContext } from '../context/ItemQtyContext'
+import CartItem from './CartItem'
+
 
 export default function Cart() {
-  const currentUser = useSelector((state) => state.user.user)
-  const navigate = useNavigate()
-  const isActive = (path) => !!matchPath({ path, end: true }, location.pathname);
 
-  const [ allCarts, setAllCarts ] = React.useState([])
-  const [ activeCart, setActiveCart ] = React.useState(null)
-  const [ currentStore, setCurrentStore ] = React.useState(null)
+  const navigate = useNavigate()
+  const currentUser = useSelector((state) => state.user.user)
+  const isActive = (path) => !!matchPath({ path, end: true }, location.pathname);
+  
+  const {activeCart, getActiveCart, remove} = useContext(CartContext) 
+  const { getPreviousQty, updateCart, removeProduct } = useContext(ItemQtyContext)
+
+  const [ allCarts, setAllCarts ] = useState([])
+  const [ currentStore, setCurrentStore ] = useState(null)
 
   let cartTotal = 0;
   activeCart ? activeCart.products.map((product)=>{
     cartTotal += product.quantityInCart * product.price
   }) : null
-
+ 
   async function allStoreCarts() {
     try {
       const res = await fetch('/api/user/carts', {
@@ -28,7 +37,6 @@ export default function Cart() {
 
       })
       const data = await res.json()
-      console.log(data.cartStoresInArea)
       setAllCarts(data.cartStoresInArea)
 
       if (data.success === false) {
@@ -64,35 +72,98 @@ export default function Cart() {
     }
   }
 
+
+  async function checkAvailability() {
+    try{
+      const res = await fetch('/api/user/check-availability',{
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({store : location.pathname.split('/store/')[1], user : currentUser._id})
+      })
+
+      const data = await res.json()
+
+      if(data.success === false){
+        console.log(data.message)
+        return true
+      }
+
+      if(data.avail === false){
+        toast.error(data.message)
+        return true
+      }
+
+      return false
+
+    }
+    catch(err){
+      console.log(err)
+      return true
+    }
+  }
+
+  async function updateInventory() {
+    try{
+      const res = await fetch('/api/user/update-inventory',{
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({store : location.pathname.split('/store/')[1], user : currentUser._id})
+      })
+
+      const data = await res.json()
+
+      if(data.success === false){
+        console.log(data.message)
+        return
+      }
+
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+
   useEffect(()=>{
     getStore()
   }, [location.pathname])
 
   useEffect(() => {
     if (isActive('/') || isActive('/shop/:category')) {
-      setActiveCart(null);
+      remove()
     } else if (isActive('/store/:storeId')) {
       const storeId = location.pathname.split('/store/')[1];
-      const storeCart = allCarts.find((cart) => cart.store === storeId);
-      setActiveCart(storeCart);
+      // const storeCart = allCarts.find((cart) => cart.store === storeId);
+      getActiveCart(currentUser._id, storeId);
     }
   }, [location.pathname, allCarts]);
 
 
   const allCartsOfUser = allCarts
-  .filter(cart => cart.productCount !== 0)
-  .map(cart => (
+  .filter(cart => cart.products.length !== 0)
+  .map(cart => (    
     <div key={cart._id} className='cart-store'>
       <div className='cart-store-upper'>
         <div className='cart-store-logo'><img src={cart.logo} /></div>
         <div className='cart-store-info'>
           <p>{cart.businessName}</p>
-          <p>{cart.categories[0]}</p>
-          <p>{cart.categories[1]}</p>
+          <span>
+            {cart.categories[0]?<span>{cart.categories[0]}</span> : null}
+            {cart.categories[1]?<span> &nbsp; · &nbsp;{cart.categories[1]}</span>:null}
+          </span>
+          <span>
+            {cart.categories[2]?<span>{cart.categories[2]}</span> : null}
+            {cart.categories[3]?<span> &nbsp; · &nbsp;{cart.categories[3]}</span> : null}
+          </span>
+          
         </div>
       </div>
       <div className='cart-store-lower'>
-        <div className='cart-product-message'>{cart.productCount} products in cart</div>
+        <div className='cart-product-message'>{cart.products.length} products in cart</div>
         <div className='continue-button-container'>
           <div className='continue-button' onClick={() => navigate(`/store/${cart.store}`)}>
             Continue Shopping <span className="material-symbols-outlined">trending_flat</span>
@@ -102,12 +173,138 @@ export default function Cart() {
     </div>
   ));
 
+  const activeCartProducts = activeCart? activeCart.products.map((product)=>{
+    return (
+      <CartItem 
+        key = {product._id}
+        product = {product}
+      />
+    )}) : null
+    
+
+  async function handlePayment() {
+
+    if(currentUser.address == 'none' || currentUser.address == "" || currentUser.address == null){
+      toast.error('Your Address is required')
+      return
+    }
+    if(currentUser.phone == 'none' || currentUser.phone == '' || currentUser.phone == null){
+      toast.error('Your Phone number is required')
+      return
+    }
+
+    const availabilityCheck = await checkAvailability();
+    if(availabilityCheck){
+      return
+    }
+  
+    try{
+      const res = await fetch('/api/payment/order',{
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({amount : cartTotal})
+      })
+
+      const data = await res.json()
+      handlePaymentVerify(data.order)
+
+      if(data.success === false){
+        console.log(data.message)
+        return
+      }
+
+    }
+    catch(err){
+      console.log(err)
+    }
+  
+  }
+
+  async function handlePaymentVerify(orderData) {
+    const options = {
+      key : import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount : orderData.amount,
+      currency : orderData.currency,
+      name : 'Arth',
+      description : 'Test Mode',
+      order_id : orderData.id,
+
+      handler : async (response) => {
+        try{
+          const verifyRes = await fetch('/api/payment/verify',{
+            method : 'POST',
+            headers : {
+              'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+              razorpay_order_id : response.razorpay_order_id,
+              razorpay_payment_id : response.razorpay_payment_id,
+              razorpay_signature : response.razorpay_signature
+            })
+          })
+    
+          const verifyData = await verifyRes.json()
+    
+          if(verifyData.success === false){
+            console.log(verifyData.message)
+            return
+          }
+
+          saveUserOrder()
+          updateInventory()
+
+          if(verifyData.message){
+            toast.success(verifyData.message)
+          }
+    
+        }
+        catch(err){
+          console.log(err)
+        }
+      },
+
+      theme : {
+        color : "#4B6340"
+      }
+    }
+
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open()
+  }
+  
+  async function saveUserOrder() {
+    try{
+      const res = await fetch('/api/user/save-order',{
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({user : currentUser._id, store : activeCart.store, totalAmount : cartTotal})
+      })
+
+      const data = await res.json()
+
+      if(data.success === false){
+        console.log(data.message)
+        return
+      }
+
+      allStoreCarts()
+
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
 
   return (
     <>
     <span className="material-symbols-outlined click-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onClick={allStoreCarts}>shopping_cart</span>
 
-    <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style={{ width: "500px" }}>
+    <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style={{ width: "500px"}}>
         <div className="offcanvas-header cart-head">
           <h5 className="offcanvas-title" id="offcanvasRightLabel">{isActive('/store/:storeId') && currentStore ? currentStore.businessName : 'Carts'}</h5>
           <p>Shopping in {currentUser.zipcode}</p>
@@ -118,7 +315,7 @@ export default function Cart() {
           {isActive('/store/:storeId') && currentStore ? 
             (<div className='active-cart-container'>
 
-              {activeCart && activeCart.productCount !== 0 ?
+              {activeCart && activeCart.products.length !== 0 ?
                 <div className='active-cart-head'>
                   <div className='active-cart-logo'><img src={currentStore.logo} /></div>
                   <div className='active-cart-info'>
@@ -133,43 +330,31 @@ export default function Cart() {
                   </div>
                 </div> : null}
 
-              {activeCart && activeCart.productCount !== 0 ? activeCart.products.map((product)=>{
-                return (
-                  <div className='cart-products' key={product._id}>
-                    <div className='cart-product-img'><img src={product.image} /></div>
-                    <div className='cart-product-info'>
-                      <div className='cart-product-info-detail'>
-                        {product.name}
-                        <p>{product.quantity}</p>
-                      </div>
-                      <div className='cart-product-info-price'>
-                        <span className='cart-product-info-price-qty'><span className="material-symbols-outlined">remove</span>{product.quantityInCart} <span className="material-symbols-outlined">add</span></span>
-                        <span className='cart-product-info-price-total'>₹&nbsp;{product.quantityInCart * product.price}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}) : 
+              {activeCart && activeCart.products.length !== 0 ? 
+                <>
+                
+                {activeCartProducts}
+                
+                <div className='checkout-container'>
+                  <div className='checkout' onClick={handlePayment}><span className="material-symbols-outlined">shopping_cart_checkout</span>&nbsp;Checkout<div>₹&nbsp;{cartTotal}</div></div>
+                </div>
+                </>
+                : 
                 
                 <div className='empty-cart'>
                   <img src={cartImage} />
                   <span>Cart is empty</span>
                 </div>
               }
-
-              {activeCart && activeCart.productCount !== 0 ?
-                <div className='checkout-container'>
-                  <div className='checkout'><span className="material-symbols-outlined">shopping_cart_checkout</span>&nbsp;Checkout<div>₹&nbsp;{cartTotal}</div></div>
-                </div> : null
-              }
               
             </div>) : 
             
-            (allCartsOfUser.length !== 0? allCartsOfUser : 
-            
-            <div className='empty-cart'>
-              <img src={cartImage} />
-              <span>Cart is empty</span>
-            </div>)
+            (allCartsOfUser.length !== 0? allCartsOfUser :  
+              <div className='empty-cart'>
+                <img src={cartImage} />
+                <span>Cart is empty</span>
+              </div>
+            )
           }
       </div>
     </div>

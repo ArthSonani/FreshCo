@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { userSigninSuccess } from '../redux/user/userSlice'
 
 export default function UserAccount() {
 
+  const dispatch = useDispatch() 
   const currentUser = useSelector((state)=>state.user.user)
 
-  const [ accountData, setAccountData ] = React.useState({})
+  const [ accountData, setAccountData ] = React.useState({}) 
   const [ currentField, setCurrentField ] = React.useState(null)
   const [ updatedValue, setUpdatedValue ] = React.useState('')
   const [ formError, setFormError ] = React.useState(null)
@@ -40,6 +42,8 @@ export default function UserAccount() {
         })
         
         const data = await res.json()
+
+        console.log(data)
   
         if(data.success === false){
           console.log(data.message)
@@ -47,7 +51,8 @@ export default function UserAccount() {
         }
   
         setAccountData(data.userData)
-  
+        dispatch(userSigninSuccess(data.userData))
+        
       }
       catch(err){
         console.log(err)
@@ -58,6 +63,24 @@ export default function UserAccount() {
 
 
   async function updateAccount(){
+
+    const mailformat = /(\W|^)[\w.+\-]*@gmail\.com(\W|$)/;
+    if(currentField == 'email' && !updatedValue.match(mailformat)){
+      setFormError("Invalid email!")
+      return
+    }
+
+    if (currentField === 'phone') {
+      if (updatedValue.length !== 10 || !['6', '7', '8', '9'].includes(updatedValue[0])) {
+          setFormError("Invalid phone number!");
+          return;
+      }
+    }
+
+    if (currentField === 'address' && updatedValue.trim().length == 0) {
+      setFormError("Invalid Address!");
+      return;
+    }
 
     if (updatePassword.new !== updatePassword.confirm){
       setFormError("Password doesn't match!")
@@ -75,6 +98,8 @@ export default function UserAccount() {
       
       const data = await res.json()
 
+      console.log(data)
+
       if(data.success === false){
         console.log(data.message)
         setFormError(data.message)
@@ -86,6 +111,7 @@ export default function UserAccount() {
         ...prevData,
         [currentField]: updatedValue
       }));
+      dispatch(userSigninSuccess(data.userData))
       setCurrentField(null);
       setUpdatedValue('');
       setFormError(null)
@@ -107,8 +133,13 @@ export default function UserAccount() {
     setUpdatedValue(accountData[feild] || '')
   }
 
+  function closeUpdateContainer(){
+    const updateContainer = document.querySelector('.update-container')
+    updateContainer.style.display = 'none'
+  }
+
   return (
-    <div>
+    <div className='general-account'>
         <div className='account-setting-head'>
           <h3>Account settings</h3>
         </div>
@@ -118,6 +149,8 @@ export default function UserAccount() {
 
           <div className='update-container'>
             <div className='update-account'>
+            <span className="material-symbols-outlined close" onClick={closeUpdateContainer}>close</span>
+
               <h4>Change {currentField}</h4>
               {currentField === 'password'? 
               
@@ -130,6 +163,7 @@ export default function UserAccount() {
               </>) :
 
                 <input 
+                  placeholder='Enter'
                   type={['phone', 'zipcode'].includes(currentField) ? 'number' : 'text'} 
                   value={updatedValue} 
                   name={currentField} 
@@ -141,7 +175,7 @@ export default function UserAccount() {
 
               {formError && <p style={{color: 'red', marginTop: '10px', marginBottom: '0px', textAlign: 'center'}}>{formError}</p>}
 
-              <button onClick={updateAccount}>Update</button>
+              <button onClick={updateAccount} className='update-account-button'>Update</button>
             </div>
           </div>
 
@@ -198,3 +232,9 @@ export default function UserAccount() {
     </div>
   )
 }
+
+
+
+
+
+// update data to redux when update done

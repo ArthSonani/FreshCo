@@ -3,7 +3,7 @@ import React from 'react'
 export default function Product(props) {
  
   const [ formData, setFromData ] = React.useState({
-    price:props.price, quantity: props.quantity, productId : props.id
+    price: props.other.price, inStock: props.other.inStock, productId : props.id
   })
 
   function updateFromData(event){
@@ -38,20 +38,17 @@ export default function Product(props) {
         const productPrice = productElement.querySelector('.product-price');
         const updateProduct = productElement.querySelector('.update-product');
         const itemDone = productElement.querySelector('.product-done')
-        const itemEdit = productElement.querySelector('.hide-edit')
-        const itemDelete = productElement.querySelector('.hide-delete')
+        const itemEdit = productElement.querySelector('.product-edit')
+        const itemDelete = productElement.querySelector('.product-delete')
+        const productSubInfo = productElement.querySelector('.product-subinfo')
                 
-        itemEdit.classList.add('product-edit')
-        itemEdit.classList.remove('hide-edit')
-
-
-        itemDelete.classList.add('product-delete')
-        itemDelete.classList.remove('hide-delete')
+        itemEdit.style.display = 'grid'
+        itemDelete.style.display = 'none'
+        itemDone.style.display = 'none'
             
+        productSubInfo.style.display = 'flex';
         productPrice.style.display = 'block';
         updateProduct.style.display = 'none';
-        itemDone.style.display = 'none'
-        
     }
     catch(err){
         console.log(err)
@@ -80,29 +77,36 @@ export default function Product(props) {
     }
   }
 
+  const inStockColor = formData.inStock <= 10? 'red' : 'green';
+
   return (
     <div className='product' id={props.id}>
         <div className='product-image'>
-          <img src={props.image} /> 
+          <img src={props.other.image} /> 
           <span className="material-symbols-outlined product-done" onClick={updateProduct} >check_circle</span>
           <span className="product-edit material-symbols-outlined" onClick={()=>props.onEdit(props.id)}>Edit</span>
           <span className="product-delete material-symbols-outlined" onClick={removeProduct}>delete</span>
         </div>
         <div className='product-info'>
             <div className='product-price'>₹ {formData.price}</div>
+            <div className='product-name'><p>{props.other.name}</p></div>
+            <div className='product-subinfo'>
+              <span>[ {props.id} ]</span> 
+              <span>{props.other.quantity}</span> 
+              <p style={{color : inStockColor}}>Stock : {formData.inStock}</p>
+            </div>
+
             <div className='update-product'>
+              <p>Price</p>
+              <input type='number' onChange={updateFromData} name='price' className='product-price-feild number-input' value={formData.price} />
+              
               <p>Quantity</p>
               <div className='product-add-remove'>
                   <span className="material-symbols-outlined product-remove">remove</span>
-                  <input type='number' onChange={updateFromData} name='quantity' className='product-quantity-feild number-input' value={formData.quantity} />
+                  <input type='number' onChange={updateFromData} name='inStock' className='product-quantity-feild number-input' value={formData.inStock} />
                   <span className="material-symbols-outlined product-add">add</span>
               </div>
-              <p>Price</p>
-              <input type='number' onChange={updateFromData} name='price' className='product-price-feild number-input' value={formData.price} />
             </div>
-            <div className='product-name'>{props.name}</div>
-
-            {/* <div className='product-quantity'>{formData.quantity}</div> */}
         </div>
     </div>
 
