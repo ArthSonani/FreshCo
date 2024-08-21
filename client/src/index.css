@@ -2844,6 +2844,7 @@
         height: 30px;
         width: 75px;
         font-size: 12px;
+        padding: 5px;
     }
     .nav-link span{
         font-size: 17px;
