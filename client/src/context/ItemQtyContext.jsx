@@ -9,7 +9,7 @@ const ItemQtyState = (props) => {
   
     async function getPreviousQty(user, store, product){
       try{
-        const res = await fetch('/api/user/previous-qty',{
+        const res = await fetch('https://freshco-0dlm.onrender.com/api/user/previous-qty',{
           method : 'POST',
           headers : {
             'Content-Type' : 'application/json'
@@ -36,7 +36,7 @@ const ItemQtyState = (props) => {
 
     async function updateCart(user, store, products, type){
       try{
-        const res = await fetch('/api/user/update-cart',{
+        const res = await fetch('https://freshco-0dlm.onrender.com/api/user/update-cart',{
           method : 'POST',
           headers : {
             'Content-Type' : 'application/json'
@@ -62,7 +62,7 @@ const ItemQtyState = (props) => {
     async function removeProduct(user, store, product){
       try{
 
-        const res = await fetch('/api/user/delete-cart-product',{
+        const res = await fetch('https://freshco-0dlm.onrender.com/api/user/delete-cart-product',{
           method : 'POST',
           headers : {
             'Content-Type' : 'application/json'
