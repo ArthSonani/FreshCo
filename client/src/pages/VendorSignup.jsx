@@ -99,7 +99,7 @@ export default function Signup() {
                     
                 const updatedFormData = {...formData, logo : downloadURL}
                 
-                const res = await fetch('/api/vendor/auth/signup', {
+                const res = await fetch('https://freshco-0dlm.onrender.com/api/vendor/auth/signup', {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -205,7 +205,7 @@ export default function Signup() {
         }
 
         try{
-            const res = await fetch('/api/vendor/auth/check-email', {
+            const res = await fetch('https://freshco-0dlm.onrender.com/api/vendor/auth/check-email', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -238,7 +238,7 @@ export default function Signup() {
         event? event.preventDefault() : null
 
         try{
-            const res = await fetch('/api/vendor/auth/generate-otp', {
+            const res = await fetch('https://freshco-0dlm.onrender.com/api/vendor/auth/generate-otp', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
