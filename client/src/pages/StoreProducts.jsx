@@ -17,7 +17,7 @@ export default function StoreProducts() {
 
   async function getStoreData(){
     try{
-      const res = await fetch('/api/shop/store-products',{
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/store-products',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
