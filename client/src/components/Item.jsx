@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { CartContext } from '../context/CartContext'
 import { ItemQtyContext } from '../context/ItemQtyContext'
-import { populate } from 'dotenv'
 
 export default function Item(props) {
 
