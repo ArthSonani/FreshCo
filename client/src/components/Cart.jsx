@@ -28,7 +28,7 @@ export default function Cart() {
  
   async function allStoreCarts() {
     try {
-      const res = await fetch('/api/user/carts', {
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/carts', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ export default function Cart() {
 
   async function getStore() {
     try{
-      const res = await fetch('/api/user/get-store',{
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/get-store',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -75,7 +75,7 @@ export default function Cart() {
 
   async function checkAvailability() {
     try{
-      const res = await fetch('/api/user/check-availability',{
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/check-availability',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -106,7 +106,7 @@ export default function Cart() {
 
   async function updateInventory() {
     try{
-      const res = await fetch('/api/user/update-inventory',{
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/update-inventory',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
