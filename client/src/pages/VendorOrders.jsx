@@ -11,7 +11,7 @@ export default function Orders() {
 
   async function userOrders() {
     try{
-      const res = await fetch('/api/shop/orders',{
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/orders',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
