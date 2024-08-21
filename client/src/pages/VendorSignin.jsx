@@ -29,7 +29,7 @@ export default function Signin() {
         event.preventDefault()
         try{
             dispatch(vendorSigninStart())
-            const res = await fetch('/api/vendor/auth/signin',{
+            const res = await fetch('https://freshco-0dlm.onrender.com/api/vendor/auth/signin',{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
