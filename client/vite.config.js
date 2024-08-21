@@ -5,7 +5,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'https://freshco-0dlm.onrender.com',
         changeOrigin: true,
         secure: false,
       },
