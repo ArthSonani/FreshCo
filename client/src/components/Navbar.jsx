@@ -41,7 +41,7 @@ export default function Navbar() {
   async function checkForOrders(e) {
     e ? e.preventDefault() : null
     try {
-      const res = await fetch('/api/shop/order-count', {
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/order-count', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -71,7 +71,7 @@ export default function Navbar() {
   
   async function updateOrderCount() {
     try {
-      const res = await fetch('/api/shop/update-order-count', {
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/update-order-count', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ export default function Navbar() {
   async function setZip(event) {
     event.preventDefault()
     try {
-      const res = await fetch('/api/user/auth/update-zip', {
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/update-zip', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
