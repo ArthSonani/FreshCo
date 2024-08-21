@@ -44,7 +44,7 @@ export default function Signup() {
         else if (correctOTP === combinedOtp){
             try{
                 dispatch(userSigninStart())
-                const res = await fetch('/api/user/auth/signup', {
+                const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/signup', {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
