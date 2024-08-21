@@ -20,7 +20,7 @@ export default function Product(props) {
 
   async function updateProduct(){
     try{
-        const res = await fetch('/api/inventory/update', {
+        const res = await fetch('https://freshco-0dlm.onrender.com/api/inventory/update', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export default function Product(props) {
 
   async function removeProduct(){
     try{
-      const res = await fetch('/api/inventory/remove', {
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/inventory/remove', {
           method: "POST",
           headers: {
               'Content-Type': 'application/json'
