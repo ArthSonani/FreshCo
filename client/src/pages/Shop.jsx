@@ -14,7 +14,7 @@ export default function Shop() {
 
   async function getNearStores(){
     try{
-      const res = await fetch('/api/shop/near-store', {
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/near-store', {
         method : 'POST',
         headers : { 
           'Content-Type': 'application/json'
