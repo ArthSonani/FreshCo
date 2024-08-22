@@ -2864,20 +2864,20 @@
         padding: 5px;
         margin: 5px;
     }
+
     .nav-link span{
         font-size: 17px;
     }
 
-
     .home-intro p{
         font-size: 15px;
-        padding-inline: 25px;
+        padding-inline: 20px;
         top: 150px;
     }
 
     .text-container{
         font-size: 22px;
-        padding-inline: 25px;
+        padding-inline: 20px;
         height: 100px;
         top: 40px;
         display: flex;

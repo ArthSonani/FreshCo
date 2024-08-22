@@ -15,7 +15,7 @@ import pets from '../assets/pets.png';
 import stationary from '../assets/stationary.png';
 
 export default function Home() {
-  //Hello 
+  
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleResize = () => {
