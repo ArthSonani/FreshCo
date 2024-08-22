@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, matchPath, useParams, Link } from 'react-router-dom'
 import { vendorSigninSuccess } from '../redux/vendor/vendorSlice'
@@ -17,12 +17,25 @@ export default function Navbar() {
   const currentVendor = useSelector((state) => state.vendor.vendor)
   const isActive = (path) => !!matchPath({ path, end: true }, location.pathname);
 
-  const [zipData, setZipData] = React.useState({
+  const [zipData, setZipData] = useState({
     zip: currentUser ? currentUser.zipcode : "", area: currentUser ? currentUser.area : "", userId: currentUser ? currentUser._id : ""
   })
 
-  const [search, setSearch] = React.useState("")
-  const [ originalCounts, setOriginalCounts ] = React.useState(null)
+  const [search, setSearch] = useState("")
+  const [ originalCounts, setOriginalCounts ] = useState(null)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
 
   function updateData(event) {
@@ -36,12 +49,15 @@ export default function Navbar() {
     })
   }
 
+  useEffect(() => {
+    setZipData({zip: currentUser ? currentUser.zipcode : "", area: currentUser ? currentUser.area : "", userId: currentUser ? currentUser._id : ""})
+  }, [currentUser])
 
 
   async function checkForOrders(e) {
     e ? e.preventDefault() : null
     try {
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/order-count', {
+      const res = await fetch('/api/shop/order-count', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -71,7 +87,7 @@ export default function Navbar() {
   
   async function updateOrderCount() {
     try {
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/update-order-count', {
+      const res = await fetch('/api/shop/update-order-count', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -100,7 +116,7 @@ export default function Navbar() {
   async function setZip(event) {
     event.preventDefault()
     try {
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/update-zip', {
+      const res = await fetch('/api/user/auth/update-zip', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -174,7 +190,7 @@ export default function Navbar() {
         <Sidebar />
 
         <div className='nav-logo-name click-button' onClick={() => navigate('/')}>
-          <img src={logo}/> FRESHCO
+          <img src={logo}/> {windowWidth <= 500 && !isActive('/') ? null : 'FRESHCO'}
         </div>
 
       </div>
@@ -194,8 +210,9 @@ export default function Navbar() {
           (<>
             {isActive('/') || isActive('/shop/:category') ?
               <span className='nav-zip click-button'>
-                <span className='nav-zip-logo' onClick={toggleZipMenu}>
-                  <span className="material-symbols-outlined">home_pin</span>{currentUser.zipcode}<span className="material-symbols-outlined">arrow_drop_down</span>
+                <span className='nav-zip-logo nav-last-options' onClick={toggleZipMenu}>
+                  <span className="material-symbols-outlined">home_pin</span>
+                  {windowWidth <= 500 ? null :currentUser.zipcode}<span className="material-symbols-outlined">arrow_drop_down</span>
                 </span>
 
                 <div className='nav-zip-form-background' onClick={hideZip}></div>
