@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import orderImage from '../assets/orderImage.svg'
 import loading from '../assets/loading.svg'
+import { useNavigate } from 'react-router-dom';
 
 export default function Orders() {
 
   const currentUser = useSelector((state)=>state.user.user);
+  const navigate = useNavigate();
 
   const [ orders, setOrders ] = useState(null);
 
   async function userOrders() {
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/user-orders',{
+      const res = await fetch('/api/user/user-orders',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
