@@ -108,7 +108,13 @@ export default function Orders() {
 
       <div className='user-orders'>
         <div className='orders-container'>
-          {orderComponents? orderComponents : null}
+          {orderComponents.length !== 0? orderComponents : 
+
+          <div className='no-order-yet'>
+            <h5>You haven't placed any order yet.</h5>
+            <div onClick={()=>navigate('/shop/all-stores')}>Shop&nbsp;&nbsp;<span className="material-symbols-outlined">trending_flat</span></div>
+          </div>
+          }
         </div>
 
         <div className='orders-sideboard'>
