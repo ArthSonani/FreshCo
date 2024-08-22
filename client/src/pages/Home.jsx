@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import homeIntro from '../assets/home-intro.png';
-import home4 from '../assets/home4.jpg';
+import home1 from '../assets/home1.jpg';
 import home2 from '../assets/home2.jpg';
 import home3 from '../assets/home3.jpg';
 
@@ -15,6 +15,21 @@ import pets from '../assets/pets.png';
 import stationary from '../assets/stationary.png';
 
 export default function Home() {
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     const texts = ['Seamless Shopping !', 'Your Pantry !', 'Modern Convenience !', 'Your Shopping Cart !'];
     let textIndex = 0;
@@ -48,7 +63,6 @@ export default function Home() {
         }
       }
     }
-
     type();
 
     return () => {
@@ -57,13 +71,29 @@ export default function Home() {
     };
   }, []);
 
+  function responsiveTextContainer(){
+    if(windowWidth <= 500){
+      return(
+      <span className='dynamic-500'>
+        <span id="dynamic-text"></span>
+        <span className="blink-cursor">|</span>
+      </span>)
+    }
+    else{
+      return(
+      <>
+        <span id="dynamic-text"></span>
+        <span className="blink-cursor">|</span>
+      </>)
+    }
+  }
+
   return (
     <section>
       <div className='home-intro'>
         <div className="text-container">
           <span className='main-head'>Where Local Markets Meet&nbsp;</span>
-          <span id="dynamic-text"></span>
-          <span className="blink-cursor">|</span>
+            {responsiveTextContainer()}
         </div>
         <p>Whatever you want from local stores, brought right to your door.</p>
         <div className='home-shop'>
@@ -99,21 +129,21 @@ export default function Home() {
       <h4 className='home-subhead'>Featured Local Markets</h4>
       <div className='home-photos'>
         <div className='home-photo'>
-          <img src={home2} alt="Market Fresh Grocery" />
+          <img src={home1} alt="Market Fresh Grocery" />
           <div>
             <h5>Market Fresh Grocery</h5>
             Experience farm-fresh produce, organic selections, and artisanal goods sourced locally. Support sustainable farming practices while enjoying the best your community has to offer.
           </div>
         </div>
         <div className='home-photo'>
-          <img src={home3} alt="City Farmers Market" style={{filter: 'brightness(90%)'}} />
+          <img src={home2} alt="City Farmers Market" style={{filter: 'brightness(90%)'}} />
           <div>
             <h5>City Farmers Market</h5>
             Your one-stop shop for the freshest fruits, vegetables, and homemade treats. Shop local and taste the difference in every bite.
           </div>
         </div>
         <div className='home-photo'>
-          <img src={home4} alt="Downtown Delights" />
+          <img src={home3} alt="Downtown Delights" />
           <div>
             <h5>Downtown Delights</h5>
             From locally roasted coffee to hand-crafted bread, Downtown Delights brings you the best of small-batch goods, supporting local artisans and farmers.
@@ -130,13 +160,3 @@ export default function Home() {
 // #BDCFB5  -- #7f9077
 // #4B6340   -- #2C7847
 // #263120
-
-
-
-
-
-// Where Local Markets Meet Your Everyday Needs
-// Your Shopping Cart
-// Your Pantry
-// Modern Convenience
-// Seamless Shopping
