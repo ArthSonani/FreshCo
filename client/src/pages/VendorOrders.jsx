@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import orderImage from '../assets/vendorOrder.svg'
 import loading from '../assets/loading.svg'
+import { useNavigate } from 'react-router-dom';
 
 export default function Orders() {
 
   const currentVendor = useSelector((state)=>state.vendor.vendor);
+  const navigate = useNavigate();
 
   const [ orders, setOrders ] = useState(null);
 
@@ -139,7 +141,13 @@ export default function Orders() {
 
     <div className='user-orders'>
       <div className='orders-container'>
-        {orderComponents? orderComponents : null}
+        {orderComponents.length !== 0? orderComponents : 
+
+        <div className='no-order-yet'>
+          <h5>No orders received yet. Stay tuned!</h5>
+          <div onClick={()=>navigate('/inventory')}>Inventory&nbsp;&nbsp;<span className="material-symbols-outlined">trending_flat</span></div>
+        </div>
+        }
       </div>
 
       <div className='orders-sideboard'>
