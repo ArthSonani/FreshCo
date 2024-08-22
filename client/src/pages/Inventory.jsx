@@ -139,7 +139,7 @@ export default function Inventory() {
                 
             const updatedFormData = {...formData, image : downloadURL}
        
-            const res = await fetch('https://freshco-0dlm.onrender.com/api/inventory/add-product', {
+            const res = await fetch('/api/inventory/add-product', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -165,7 +165,7 @@ export default function Inventory() {
 
     async function getInventoryData(){
         try{
-            const res = await fetch('https://freshco-0dlm.onrender.com/api/inventory/data',{
+            const res = await fetch('/api/inventory/data',{
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'
@@ -213,6 +213,8 @@ export default function Inventory() {
             <p>Curate with Care, Sell with Pride—Your Inventory is the Heartbeat of Our Marketplace.</p>
             <img src={inventory} />
         </div>
+
+        {searchQuery? <h5 className='search-result'>Search result for '{searchQuery}'</h5> : null}
 
         <div className={productCards.length != 0 ?'inventory-container' : 'inventory-container-with-img'}>
             {productCards.length != 0 ? productCards : <><img src={emptyInventory} /> <span>Your inventory is empty</span></>}
