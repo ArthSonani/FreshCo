@@ -530,7 +530,7 @@
 
 .blink-cursor {
     font-size: 1.2em;
-    color: 034C3C;
+    color: white;
     display: flex;
     align-items: center;
     animation: blink 0.7s infinite;
@@ -1464,7 +1464,6 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* background-image: url('../assets/apple.png') */
 }
 
 
@@ -2187,6 +2186,7 @@
     width: 100%;
     overflow: scroll;
     background-image: url('./assets/setting.svg');
+    filter: brightness(95%);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -2355,6 +2355,31 @@
 
 .user-orders{
     display: flex;
+}
+
+.no-order-yet{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 250px;
+}
+
+.no-order-yet div{
+    height: 40px;
+    width: 180px;
+    background-color: #2C7847;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: color 0.1s;
+    margin-top: 20px;
+}
+
+.no-order-yet div:hover{
+    color: rgba(255, 255, 255, .5);
 }
 
 .orders-container{
@@ -2798,14 +2823,6 @@
 .verify-container input:nth-child(3){
     margin-right: 20px;
 }
-
-
-
-
-
-
-
-
 
 
 
