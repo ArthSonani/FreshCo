@@ -56,8 +56,6 @@ export default function Signin() {
 
     }
 
-    // console.log(useSelector((state)=>state.user.user))
-
 
   return (
     <main className='signup-main'>
@@ -71,8 +69,8 @@ export default function Signin() {
 
         <div className='signup-form-container'>
             <form className='signup-form'>
-                <input type='email' className='signup-input' placeholder='Email' name='email' onChange={updateData} value={formData.email} />
-                <input type='password' className='signup-input' placeholder='Password' name='password' onChange={updateData} value={formData.password} />
+                <input type='email' className='signup-input' required placeholder='Email' name='email' onChange={updateData} value={formData.email} />
+                <input type='password' className='signup-input' required placeholder='Password' name='password' onChange={updateData} value={formData.password} />
                 <div className='button-container'>
                     {error && <p style={{color: 'red', marginTop: '20px'}}>{JSON.stringify(error)}</p>}
                     <div disable={loading? 'true' : 'undefined'} className='signup-button' onClick={submitData}>{loading? <><span className="spinner-border spinner-border-sm" aria-hidden="true" style={{marginRight: '5px'}}> </span> Loading...</> : "Sign in"}</div>
