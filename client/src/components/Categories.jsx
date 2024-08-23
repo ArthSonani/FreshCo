@@ -17,7 +17,7 @@ export default function Categories() {
     <div className='category-container'>
         <div className='category-icon-container' id='all-stores' onClick={()=>{navigate('/shop/all-stores')}}>
             <div className='category-icon'><span className="icons material-symbols-outlined">storefront</span></div>
-            <div className='category-name'>All stores</div>
+            <div className='category-name'>All&nbsp;stores</div>
         </div>
         <div className='category-icon-container' id='groceries-and-food-items' onClick={()=>{navigate('/shop/groceries-and-food-items')}}>
             <div className='category-icon'><span className="icons material-symbols-outlined">grocery</span></div>

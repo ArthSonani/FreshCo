@@ -302,7 +302,7 @@ export default function Cart() {
 
   return (
     <>
-    <span className="material-symbols-outlined click-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onClick={allStoreCarts}>shopping_cart</span>
+    <span className="material-symbols-outlined click-button cart-open" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onClick={allStoreCarts}>shopping_cart</span>
 
     <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style={{ width: "500px"}}>
         <div className="offcanvas-header cart-head">

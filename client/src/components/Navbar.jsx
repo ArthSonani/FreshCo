@@ -186,7 +186,7 @@ export default function Navbar() {
     <nav className='navbar'>
 
       <div className='nav-first'>
-        <span className="material-symbols-outlined click-button" data-bs-toggle="offcanvas" aria-controls="offcanvasWithBothOptions" data-bs-target="#offcanvasWithBothOptions">menu</span>
+        <span className="material-symbols-outlined click-button sidebar-open" data-bs-toggle="offcanvas" aria-controls="offcanvasWithBothOptions" data-bs-target="#offcanvasWithBothOptions">menu</span>
         <Sidebar />
 
         <div className='nav-logo-name click-button' onClick={() => navigate('/')}>
