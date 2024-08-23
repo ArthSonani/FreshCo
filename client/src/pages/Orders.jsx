@@ -105,8 +105,7 @@ export default function Orders() {
 }) : null
 
   return (
-    orderComponents == null ? 
-      <Loading /> :
+    // orderComponents === null ? <Loading /> :
 
       <div className='user-orders'>
         <div className='orders-container'>
