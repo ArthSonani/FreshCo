@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import orderImage from '../assets/orderImage.svg'
-import loading from '../assets/loading.svg'
+import Loading from '../components/Loading';
 import { useNavigate } from 'react-router-dom';
 
 export default function Orders() {
@@ -106,7 +106,7 @@ export default function Orders() {
 
   return (
     orderComponents == null ? 
-      <div className='loading'> <img src={loading} /></div> :
+      <Loading /> :
 
       <div className='user-orders'>
         <div className='orders-container'>
