@@ -126,7 +126,7 @@ export default function Home() {
       </div>
 
 
-      <h4 className='home-subhead'>Featured Local Markets</h4>
+      <h4 className='fc-name'>Featured Local Markets</h4>
       <div className='home-photos'>
         <div className='home-photo'>
           <img src={home1} alt="Market Fresh Grocery" />
