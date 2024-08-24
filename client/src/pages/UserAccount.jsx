@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSigninSuccess } from '../redux/user/userSlice'
+import Loading from '../components/Loading'
 
 export default function UserAccount() {
 
   const dispatch = useDispatch() 
   const currentUser = useSelector((state)=>state.user.user)
 
-  const [ accountData, setAccountData ] = React.useState({}) 
+  const [ accountData, setAccountData ] = React.useState(null) 
   const [ currentField, setCurrentField ] = React.useState(null)
   const [ updatedValue, setUpdatedValue ] = React.useState('')
   const [ formError, setFormError ] = React.useState(null)
@@ -139,97 +140,96 @@ export default function UserAccount() {
   }
 
   return (
-    <div className='general-account'>
-        <div className='account-setting-head'>
-          <h3>Account settings</h3>
+    (!accountData? <Loading /> :
+      <>
+        <div className='update-container'>
+          <div className='update-account'>
+          <span className="material-symbols-outlined close" onClick={closeUpdateContainer}>close</span>
+
+            <h4>Change {currentField}</h4>
+            {currentField === 'password'? 
+            
+            (<>
+
+              <input type='text' value={updatePassword.current} name='current' placeholder='Current password' onChange={changePassword}/>
+              <input type='text' value={updatePassword.new} name='new' onChange={changePassword} placeholder='New password'/>
+              <input type='text' value={updatePassword.confirm} placeholder='Confirm password' name='confirm' onChange={changePassword}/>
+
+            </>) :
+
+              <input 
+                placeholder='Enter'
+                type={['phone', 'zipcode'].includes(currentField) ? 'number' : 'text'} 
+                value={updatedValue} 
+                name={currentField} 
+                onChange={updateData} 
+              />
+              
+            
+            }
+
+            {formError && <p style={{color: 'red', marginTop: '10px', marginBottom: '0px', textAlign: 'center'}}>{formError}</p>}
+
+            <button onClick={updateAccount} className='update-account-button'>Update</button>
+          </div>
         </div>
 
-        <div className='user-account-info'>
-
-
-          <div className='update-container'>
-            <div className='update-account'>
-            <span className="material-symbols-outlined close" onClick={closeUpdateContainer}>close</span>
-
-              <h4>Change {currentField}</h4>
-              {currentField === 'password'? 
-              
-              (<>
-
-                <input type='text' value={updatePassword.current} name='current' placeholder='Current password' onChange={changePassword}/>
-                <input type='text' value={updatePassword.new} name='new' onChange={changePassword} placeholder='New password'/>
-                <input type='text' value={updatePassword.confirm} placeholder='Confirm password' name='confirm' onChange={changePassword}/>
-
-              </>) :
-
-                <input 
-                  placeholder='Enter'
-                  type={['phone', 'zipcode'].includes(currentField) ? 'number' : 'text'} 
-                  value={updatedValue} 
-                  name={currentField} 
-                  onChange={updateData} 
-                />
-                
-              
-              }
-
-              {formError && <p style={{color: 'red', marginTop: '10px', marginBottom: '0px', textAlign: 'center'}}>{formError}</p>}
-
-              <button onClick={updateAccount} className='update-account-button'>Update</button>
+        <div className='general-account'>
+            <div className='account-setting-head'>
+              <h3>Account settings</h3>
             </div>
-          </div>
+
+            <div className='user-account-info'>
+
+              <div className='account-category'>
+                <h5>Account information</h5>
+                <div>
+                  Email address
+                  <p className='user-info'><span>{accountData.email}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('email')}>edit</span></p>
+                </div>
+                <div>
+                  Password
+                  <p className='user-info'><span>* * * * * * *</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('password')}>edit</span></p>
+                </div>
+              </div>
 
 
+              <div className='account-category'>
+                <h5>Personal information</h5>
+                <div>
+                  First name
+                  <p className='user-info'><span>{accountData.firstname}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('firstname')}>edit</span></p>
+                </div>
+                <div>
+                  Last name
+                  <p className='user-info'><span>{accountData.lastname}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('lastname')}>edit</span></p>
+                </div>
+                <div>
+                  Phone no
+                  <p className='user-info'><span>{accountData.phone? accountData.phone : 'No phone number'}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('phone')}>edit</span></p>
+                </div>
+              </div>
 
-          <div className='account-category'>
-            <h5>Account information</h5>
-            <div>
-              Email address
-              <p className='user-info'><span>{accountData.email}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('email')}>edit</span></p>
+
+              <div className='account-category'>
+                <h5>Addresses information</h5>
+                <div>
+                  Address
+                  <p className='user-info'><span>{accountData.address? accountData.address : 'No address'}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('address')}>edit</span></p>
+                </div>
+                <div>
+                  Area
+                  <p className='user-info'><span>{accountData.area}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('area')}>edit</span></p>
+                </div>
+                <div>
+                  Zipcode
+                  <p className='user-info'><span>{accountData.zipcode}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('zipcode')}>edit</span></p>
+                </div>
+              </div>
             </div>
-            <div>
-              Password
-              <p className='user-info'><span>* * * * * * *</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('password')}>edit</span></p>
-            </div>
-          </div>
-
-
-          <div className='account-category'>
-            <h5>Personal information</h5>
-            <div>
-              First name
-              <p className='user-info'><span>{accountData.firstname}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('firstname')}>edit</span></p>
-            </div>
-            <div>
-              Last name
-              <p className='user-info'><span>{accountData.lastname}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('lastname')}>edit</span></p>
-            </div>
-            <div>
-              Phone no
-              <p className='user-info'><span>{accountData.phone? accountData.phone : 'No phone number'}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('phone')}>edit</span></p>
-            </div>
-          </div>
-
-
-          <div className='account-category'>
-            <h5>Addresses information</h5>
-            <div>
-              Address
-              <p className='user-info'><span>{accountData.address? accountData.address : 'No address'}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('address')}>edit</span></p>
-            </div>
-            <div>
-              Area
-              <p className='user-info'><span>{accountData.area}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('area')}>edit</span></p>
-            </div>
-            <div>
-              Zipcode
-              <p className='user-info'><span>{accountData.zipcode}</span> <span className='material-symbols-outlined' onClick={()=>changeFeild('zipcode')}>edit</span></p>
-            </div>
-          </div>
-
-
         </div>
-    </div>
+      </>
+    )
   )
 }
 

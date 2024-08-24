@@ -156,6 +156,18 @@ export default function Inventory() {
             setLoading(false)
             const addNew = document.querySelector('.add-new')
             addNew.style.display = 'none'
+            setFormData({ 
+                name: "", 
+                price: "", 
+                quantity: "", 
+                stock: "",
+                description: "", 
+                image: "", 
+                mainCategory: "", 
+                subCategory: "",
+                storeId: currentVendor ? currentVendor._id : null
+            })
+            setImage(null)
             getInventoryData()
         }
         catch(err){

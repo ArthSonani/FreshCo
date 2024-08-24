@@ -235,13 +235,13 @@ export default function Navbar() {
           currentVendor ?
             (<>{isActive('/inventory') ?
               <>
-                <div className='nav-options' onClick={openAddProduct}><span className="material-symbols-outlined">note_stack_add</span>&nbsp;&nbsp;Add product</div>  
+                <div className='nav-options' onClick={openAddProduct}><span className="material-symbols-outlined">note_stack_add</span>{windowWidth < 500 ? null :'&nbsp;&nbsp;Add product'}</div>  
                 <div className='nav-options' onClick={updateOrderCount}>
                   { currentVendor.orderCount !== originalCounts ? <span className='new-notification'></span> : null}
-                  <span className="material-symbols-outlined">contract</span>&nbsp;&nbsp;Orders
+                  <span className="material-symbols-outlined">contract</span>{windowWidth < 500 ? null :'&nbsp;&nbsp;Orders'}
                 </div>
               </> :
-              <div className='nav-options' onClick={() => navigate('/inventory')}><span className="material-symbols-outlined">inventory</span>&nbsp;&nbsp;Inventory</div>}
+              <div className='nav-options' onClick={() => navigate('/inventory')}><span className="material-symbols-outlined">inventory</span>{windowWidth < 500 ? null :'&nbsp;&nbsp;Inventory'}</div>}
             </>) :
             (<>
               <div className='nav-link click-button' onClick={() => navigate('/user/signin')}><span className="material-symbols-outlined">login</span>Log in</div>

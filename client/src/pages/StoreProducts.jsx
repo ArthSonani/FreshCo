@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { categoriesData } from '../categoriesData.js'
 import product404 from '../assets/product404.svg'
 import { CartContext } from '../context/CartContext.jsx';
+import Loading from '../components/Loading.jsx'
 
 export default function StoreProducts() {
 
@@ -45,7 +46,7 @@ export default function StoreProducts() {
     getStoreData()
   }, [params.storeId, category, urlParams.get('search'), activeCart])
 
-  const productsOfStore = products.map((product)=>{
+  const productsOfStore = products? products.map((product)=>{
     return(
       <Item 
         key={product._id}   
@@ -61,11 +62,7 @@ export default function StoreProducts() {
         subCat={product.subCategory}
       />
     )
-  })
-
-  if (!store) {
-    return <div>Loading...</div>;
-  }
+  }) : null
 
   function selectCategory(id){
     setCategory(id)
@@ -84,7 +81,12 @@ export default function StoreProducts() {
   }
 
   return (
+    
     <div className='store-products'>
+      {!productsOfStore || !store? <Loading /> :
+      <>
+
+
       <div className='store-products-left'>
         <div className='store-left-intro'>
           <div className='store-front-logo'>
@@ -119,6 +121,7 @@ export default function StoreProducts() {
           })}
         </div>
       </div> 
+      
       <div className='store-products-right'>
         <div className='store-category-head'>
         <h3>{category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ').replace(/main/, '')}</h3> 
@@ -133,6 +136,7 @@ export default function StoreProducts() {
           productsOfStore}
         </div>
       </div>
+      </> }
     </div>
   )
 }

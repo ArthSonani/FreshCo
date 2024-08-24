@@ -10,6 +10,19 @@ export default function Orders() {
   const navigate = useNavigate();
 
   const [ orders, setOrders ] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   async function userOrders() {
     try{
@@ -112,7 +125,7 @@ export default function Orders() {
                   <div className='store-order-product-info'>
                     <div className='product-id-name'>
                       <span>{product.name}</span>
-                      <span>ID: {product._id}</span>
+                      <span>{windowWidth < 500? null : 'ID:'} {product._id}</span>
                     </div>
                     <div className='product-qty-pr'>
                       <div>
@@ -140,6 +153,14 @@ export default function Orders() {
     <div className='loading'> <img src={loading} /></div> :
 
     <div className='user-orders'>
+      {windowWidth < 500 ? 
+        <div className='orders-sideboard'>
+          <h2>Your Orders</h2>
+          <p>Orders Incoming! {windowWidth<500? <br />:null} Get Ready to Fulfill Them!</p>
+          <img src={orderImage}/>
+        </div> : null
+      }
+
       <div className='orders-container'>
         {orderComponents.length !== 0? orderComponents : 
 
@@ -150,11 +171,13 @@ export default function Orders() {
         }
       </div>
 
-      <div className='orders-sideboard'>
-        <h2>Your Orders</h2>
-        <p>Orders Incoming! Get Ready to Fulfill Them!</p>
-        <img src={orderImage}/>
-      </div>
+      {windowWidth < 500 ? null : 
+        <div className='orders-sideboard'>
+          <h2>Your Orders</h2>
+          <p>Orders Incoming! Get Ready to Fulfill Them!</p>
+          <img src={orderImage}/>
+        </div>
+      }
     </div>
   )
 }

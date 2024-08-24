@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Store from '../components/Store'
 import Categories from '../components/Categories'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import resultNotFound from '../assets/search.svg'
+import Loading from '../components/Loading'
 
 export default function Shop() {
   const params = useParams()
@@ -11,6 +12,49 @@ export default function Shop() {
   const currentUser = useSelector((state)=>state.user.user)
 
   const [ stores , setStores ] = React.useState([])
+
+
+  // const [assetsLoaded, setAssetsLoaded] = useState(false);
+
+  // // Function to check if fonts are loaded
+  // const checkFontsLoaded = () => {
+  //   return document.fonts.ready;
+  // };
+
+  // // Function to check if all images are loaded
+  // const checkImagesLoaded = () => {
+  //   return new Promise((resolve) => {
+  //     const images = document.images;
+  //     let loadedCount = 0;
+  //     const totalCount = images.length;
+
+  //     const checkCompletion = () => {
+  //       if (loadedCount === totalCount) {
+  //         resolve();
+  //       }
+  //     };
+
+  //     for (let img of images) {
+  //       if (img.complete) {
+  //         loadedCount++;
+  //         checkCompletion();
+  //       } else {
+  //         img.onload = () => {
+  //           loadedCount++;
+  //           checkCompletion();
+  //         };
+  //         img.onerror = () => {
+  //           loadedCount++;
+  //           checkCompletion();
+  //         };
+  //       }
+  //     }
+
+  //     if (totalCount === 0) {
+  //       resolve();
+  //     }
+  //   });
+  // };
 
   async function getNearStores(){
     try{
@@ -43,7 +87,16 @@ export default function Shop() {
     getNearStores()
   }, [params.category, urlParams.get('search'), currentUser.zipcode])
 
-  const nearStoreData = stores.map((store)=>{
+  // useEffect(() => {
+  //   const loadAssets = async () => {
+  //     await Promise.all([getNearStores(), checkFontsLoaded(), checkImagesLoaded()]);
+  //     setAssetsLoaded(true);
+  //   };
+
+  //   loadAssets();
+  // }, []);
+
+  const nearStoreData = stores? stores.map((store)=>{
     return (
       <Store
         key = {store._id}
@@ -54,28 +107,31 @@ export default function Shop() {
         categories = {store.categories}
       />
     )
-  })
+  }) : null 
 
 
   return (
     <div>
+      {!nearStoreData? <Loading /> : 
 
-      <div className='store-heading'>
-        <h2>{params.category.replace(/-/g, ' ').replace(/\b\w/, char => char.toUpperCase())} in {currentUser.area}</h2>
-      </div>
+      <>
+        <div className='store-heading'>
+          <h2>{params.category.replace(/-/g, ' ').replace(/\b\w/, char => char.toUpperCase())} in {currentUser.area}</h2>
+        </div>
 
-      <Categories />
+        <Categories />
 
-      {urlParams.get('search')? <h5 className='search-result'>Search result for '{urlParams.get('search')}'</h5> : null}
+        {urlParams.get('search')? <h5 className='search-result'>Search result for '{urlParams.get('search')}'</h5> : null}
 
-      <div className='stores-container'>
-        {nearStoreData.length == 0? 
-        <div className='result-not-found'>
-          <img src={resultNotFound} />
-          <span>Stores not found</span>
-        </div> : nearStoreData}
-      </div>
-        
+        <div className='stores-container'>
+          {nearStoreData.length == 0? 
+          <div className='result-not-found'>
+            <img src={resultNotFound} />
+            <span>Stores not found</span>
+          </div> : nearStoreData}
+        </div>
+      </>
+      }
     </div>
   )
 }

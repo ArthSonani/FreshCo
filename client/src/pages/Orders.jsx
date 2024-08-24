@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import orderImage from '../assets/orderImage.svg'
-import loading from '../assets/loading.svg'
 import { useNavigate } from 'react-router-dom';
+import Loading from '../components/Loading';
 
 export default function Orders() {
 
@@ -10,6 +10,19 @@ export default function Orders() {
   const navigate = useNavigate();
 
   const [ orders, setOrders ] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   async function userOrders() {
     try{
@@ -87,9 +100,11 @@ export default function Orders() {
             {order.products[2] ?<img src={order.products[2].image}/> : null}
             {itemsInOrder > order.products.length ? <span style={{left : moreItemPlace}}>+ {itemsInOrder - (order.products.length <= 3? order.products.length : 3)}</span> : null}
           </div>
-          <div className='order-product-info'>
-              <span>Your order contains {itemsInOrder} {itemsInOrder == 1 ? "Item" : "Items"}</span>
-          </div>
+          {windowWidth < 500? null : 
+            <div className='order-product-info'>
+                <span>Your order contains {itemsInOrder} {itemsInOrder == 1 ? "Item" : "Items"}</span>
+            </div>
+          }
         </div>
       </div>
 
@@ -106,9 +121,18 @@ export default function Orders() {
 
   return (
     orderComponents == null ? 
-      <div className='loading'> <img src={loading} /></div> :
+      <Loading /> :
 
       <div className='user-orders'>
+
+        {windowWidth < 500? 
+          <div className='orders-sideboard'>
+            <h2>Your Orders</h2>
+            <p>Hold Tight, It's on Its Way!</p>
+            <img src={orderImage}/>
+          </div> : null
+        }
+
         <div className='orders-container'>
           {orderComponents.length !== 0? orderComponents : 
 
@@ -119,11 +143,14 @@ export default function Orders() {
           }
         </div>
 
-        <div className='orders-sideboard'>
-          <h2>Your Orders</h2>
-          <p>Hold Tight, It's on Its Way!</p>
-          <img src={orderImage}/>
-        </div>
+        {windowWidth < 500? null :
+          <div className='orders-sideboard'>
+            <h2>Your Orders</h2>
+            <p>Hold Tight, It's on Its Way!</p>
+            <img src={orderImage}/>
+          </div>
+        }
+
       </div>
     )
 }

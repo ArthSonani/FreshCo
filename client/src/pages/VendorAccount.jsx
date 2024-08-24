@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { categoriesData } from '../categoriesData'
 import { vendorSigninSuccess } from '../redux/vendor/vendorSlice'
+import Loading from '../components/Loading'
 
 export default function VendorAccount() {
   
   const dispatch = useDispatch() 
   const currentVendor = useSelector((state)=>state.vendor.vendor)
 
-  const [ accountData, setAccountData ] = React.useState({})
+  const [ accountData, setAccountData ] = React.useState(null)
   const [ currentField, setCurrentField ] = React.useState(null)
   const [ updatedValue, setUpdatedValue ] = React.useState('')
   const [ formError, setFormError ] = React.useState(null)
@@ -81,7 +82,7 @@ export default function VendorAccount() {
   }, [currentVendor._id])
 
   useEffect(() => {
-    if (accountData.categories) {
+    if (accountData? accountData.categories : null) {
       setUpdateCategories(accountData.categories);
     }
   }, [accountData]);
@@ -172,15 +173,9 @@ export default function VendorAccount() {
   }
 
   return (
-    <div className='general-account'>
-        <div className='account-setting-head'>
-          <h3>Account settings</h3>
-        </div>
-
-        <div className='user-account-info'>
-
-
-          <div className='update-container'>
+    (!accountData? <Loading /> :
+    <>
+    <div className='update-container'>
             <div className={currentField == 'categories'? 'vendor-acc-select' :'update-account'}>
               <span className="material-symbols-outlined close" onClick={closeUpdateContainer}>close</span>
 
@@ -226,6 +221,13 @@ export default function VendorAccount() {
           </div>
 
 
+    <div className='general-account'>
+
+        <div className='account-setting-head'>
+          <h3>Account settings</h3>
+        </div>
+
+        <div className='user-account-info'>
 
           <div className='account-category'>
             <h5>Account information</h5>
@@ -285,5 +287,6 @@ export default function VendorAccount() {
 
         </div>
     </div>
+    </> )
   )
 }

@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { matchPath, useNavigate } from 'react-router-dom'
-import toast, { Toaster } from 'react-hot-toast'
 
 import cartImage from '../assets/empty-cart.png'
 import { CartContext } from '../context/CartContext'
-import { ItemQtyContext } from '../context/ItemQtyContext'
 import CartItem from './CartItem'
+import Loading from './Loading'
 
 
 export default function Cart() {
@@ -16,10 +15,22 @@ export default function Cart() {
   const isActive = (path) => !!matchPath({ path, end: true }, location.pathname);
   
   const {activeCart, getActiveCart, remove} = useContext(CartContext) 
-  const { getPreviousQty, updateCart, removeProduct } = useContext(ItemQtyContext)
 
-  const [ allCarts, setAllCarts ] = useState([])
+  const [ allCarts, setAllCarts ] = useState(null)
   const [ currentStore, setCurrentStore ] = useState(null)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   let cartTotal = 0;
   activeCart ? activeCart.products.map((product)=>{
@@ -143,7 +154,7 @@ export default function Cart() {
   }, [location.pathname, allCarts]);
 
 
-  const allCartsOfUser = allCarts
+  const allCartsOfUser = allCarts? allCarts
   .filter(cart => cart.products.length !== 0)
   .map(cart => (    
     <div key={cart._id} className='cart-store'>
@@ -171,7 +182,7 @@ export default function Cart() {
         </div>
       </div>
     </div>
-  ));
+  )): null
 
   const activeCartProducts = activeCart? activeCart.products.map((product)=>{
     return (
@@ -301,11 +312,15 @@ export default function Cart() {
 
 
   return (
+    
     <>
     <span className="material-symbols-outlined click-button cart-open" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onClick={allStoreCarts}>shopping_cart</span>
 
     <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style={{ width: "500px"}}>
+      {!allCarts? <Loading /> :
+      <>
         <div className="offcanvas-header cart-head">
+          {windowWidth < 500? <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> : null}
           <h5 className="offcanvas-title" id="offcanvasRightLabel">{isActive('/store/:storeId') && currentStore ? currentStore.businessName : 'Carts'}</h5>
           <p>Shopping in {currentUser.zipcode}</p>
         </div>
@@ -349,15 +364,17 @@ export default function Cart() {
               
             </div>) : 
             
-            (allCartsOfUser.length !== 0? allCartsOfUser :  
+            (allCartsOfUser? allCartsOfUser.length !== 0? allCartsOfUser :  
               <div className='empty-cart'>
                 <img src={cartImage} />
                 <span>Cart is empty</span>
-              </div>
+              </div>: null
             )
           }
       </div>
+      </>}
     </div>
     </>
+    
   )
 }

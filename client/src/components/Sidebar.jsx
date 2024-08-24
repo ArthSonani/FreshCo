@@ -62,7 +62,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="offcanvas offcanvas-start" style={{ width: "300px" }} data-bs-scroll="true" tabIndex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div className="offcanvas offcanvas-start" style={{ width: "250px" }} data-bs-scroll="true" tabIndex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
         <div className="offcanvas-header">
 
         <h5 className="offcanvas-title sidebar-head-container" id="offcanvasWithBothOptionsLabel" onClick={() => navigate('/')}>
@@ -87,9 +87,12 @@ export default function Sidebar() {
             <Link className='sidebar-links' to='/shop/all-stores' ><div className={`sidebar-options ${isActive('/shop/:category') || isActive('/store/:storeId') ? 'selected-link' : ''}`} data-bs-dismiss="offcanvas"><span className="material-symbols-outlined">storefront</span>Store</div></Link>
             <Link className='sidebar-links' to='/user/orders'><div className={`sidebar-options ${isActive('/user/orders') ? 'selected-link' : ''}`} data-bs-dismiss="offcanvas"><span className="material-symbols-outlined">contract</span>Orders</div></Link>
             <Link className='sidebar-links' to='/user/account'><div className={`sidebar-options ${isActive('/user/account') ? 'selected-link' : ''}`} data-bs-dismiss="offcanvas"><span className="material-symbols-outlined">manage_accounts</span>Manage Account</div></Link>
+
+            
+
+
             <div className='sidebar-bottom'>
               <hr style={{margin: '5px'}}/>
-              {/* <div className='sidebar-username'><span className="material-symbols-outlined">account_circle</span>&nbsp;&nbsp;{currentUser.firstname}&nbsp;{currentUser.lastname}</div> */}
               <div id='user-signout' className='sidebar-logout' onClick={handleUserSignOut} data-bs-dismiss="offcanvas"><span className="material-symbols-outlined">logout</span>&nbsp;&nbsp;Log out</div>
             </div>
             </>) :
