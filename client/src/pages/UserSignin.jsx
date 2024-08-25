@@ -75,7 +75,7 @@ export default function Signin() {
                     {error && <p style={{color: 'red', marginTop: '20px'}}>{JSON.stringify(error)}</p>}
                     <div disable={loading? 'true' : 'undefined'} className='signup-button' onClick={submitData}>{loading? <><span className="spinner-border spinner-border-sm" aria-hidden="true" style={{marginRight: '5px'}}> </span> Loading...</> : "Sign in"}</div>
                 </div>
-                <p className='signup-p'>By signing up, or continuing with Facebook or Google,<br />
+                <p className='signup-p'>By signing up, <br />
                 you agree to the FRESHCO <Link to='/'><span style={{textDecoration: 'underline'}}>Terms of Service</span></Link></p>
             </form>
         </div>

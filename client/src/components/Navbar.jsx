@@ -20,6 +20,7 @@ export default function Navbar() {
   const [zipData, setZipData] = useState({
     zip: currentUser ? currentUser.zipcode : "", area: currentUser ? currentUser.area : "", userId: currentUser ? currentUser._id : ""
   })
+  const [ loading, setLoading ] = useState(false)
 
   const [search, setSearch] = useState("")
   const [ originalCounts, setOriginalCounts ] = useState(null)
@@ -115,6 +116,7 @@ export default function Navbar() {
 
   async function setZip(event) {
     event.preventDefault()
+    setLoading(true)
     try {
       const res = await fetch('/api/user/auth/update-zip', {
         method: "POST",
@@ -132,12 +134,14 @@ export default function Navbar() {
       }
       dispatch(updateUser(data[0]))
 
+      setLoading(false)
       const zipForm = document.querySelector('.nav-zip-form-container');
       const zipBackgroung = document.querySelector('.nav-zip-form-background');
       zipBackgroung.style.display = 'none';
       zipForm.style.display = 'none';
     }
     catch (err) {
+      setLoading(false)
       console.log(err)
     }
   }
@@ -196,7 +200,7 @@ export default function Navbar() {
       </div>
 
       {isActive('/shop/:category') || ( isActive('/store/:storeId') && !isActive('/store/orders') ) || isActive('/inventory')?
-        (<div className='nav-search'>
+        (<div className='nav-search'  style={isActive('/store/:storeId') || isActive('inventory') ? { width: '45%' } : null}>
           <form className='nav-form' onSubmit={handleSearch}>
             <span className="material-symbols-outlined search-icon">search</span>
             <input type='text' placeholder={isActive('/shop/:category') ? 'Search Stores' : isActive('/inventory') || isActive('/store/:storeId')? 'Search Products' : null} value={search} onChange={(e) => setSearch(e.target.value.trimStart())} />
@@ -216,13 +220,16 @@ export default function Navbar() {
                 </span>
 
                 <div className='nav-zip-form-background' onClick={hideZip}></div>
-                <div className='nav-zip-form-container' style={{ marginTop: '10px', left: '-50%' }}>
+                <div className='nav-zip-form-container'>
                   <form className='nav-zip-form'>
                     <input type='text' className='nav-form-area' value={zipData.area} name='area' onChange={updateData} />
                     <div className='zip-form-container'>
                       <input type='number' className='nav-zip-input number-input' name='zip' onChange={updateData} value={zipData.zip} />
+                      {loading? 
+                      <button className='nav-form-button' disabled><span className="spinner-border spinner-border-sm" aria-hidden="true"></span></button>:
                       <button className='nav-form-button' onClick={setZip}>set</button>
-                    </div>
+                      }
+                     </div>
                   </form>
                 </div>
               </span>
@@ -235,13 +242,13 @@ export default function Navbar() {
           currentVendor ?
             (<>{isActive('/inventory') ?
               <>
-                <div className='nav-options' onClick={openAddProduct}><span className="material-symbols-outlined">note_stack_add</span>{windowWidth < 500 ? null :'&nbsp;&nbsp;Add product'}</div>  
+                <div className='nav-options' onClick={openAddProduct}><span className="material-symbols-outlined">note_stack_add</span>&nbsp;{windowWidth < 500 ? null :'  Add product'}</div>  
                 <div className='nav-options' onClick={updateOrderCount}>
                   { currentVendor.orderCount !== originalCounts ? <span className='new-notification'></span> : null}
-                  <span className="material-symbols-outlined">contract</span>{windowWidth < 500 ? null :'&nbsp;&nbsp;Orders'}
+                  <span className="material-symbols-outlined">contract</span>&nbsp;{windowWidth < 500 ? null :'  Orders'}
                 </div>
               </> :
-              <div className='nav-options' onClick={() => navigate('/inventory')}><span className="material-symbols-outlined">inventory</span>{windowWidth < 500 ? null :'&nbsp;&nbsp;Inventory'}</div>}
+              <div className='nav-options' onClick={() => navigate('/inventory')}><span className="material-symbols-outlined">inventory</span>&nbsp;{windowWidth < 500 ? null :'  Inventory'}</div>}
             </>) :
             (<>
               <div className='nav-link click-button' onClick={() => navigate('/user/signin')}><span className="material-symbols-outlined">login</span>Log in</div>

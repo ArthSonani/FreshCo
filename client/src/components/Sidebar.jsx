@@ -49,10 +49,10 @@ export default function Sidebar() {
     }
   }
 
-  // function openAddProduct() {
-  //   activeLink('add-product')
-  //   document.querySelector('.add-new').style.display = 'grid'
-  // }
+  function openAddProduct() {
+    activeLink('add-product')
+    document.querySelector('.add-new').style.display = 'grid'
+  }
 
   function activeLink(id) {
     const links = document.querySelectorAll('.sidebar-options')

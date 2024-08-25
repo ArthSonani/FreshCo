@@ -346,7 +346,7 @@ export default function Signup() {
                     <div className='button-container'>
                         <button disable={loading? 'true' : 'undefined'} onClick={checkData} className='signup-button'>{loading? "Loading..." : "Create account" }</button>
                     </div>
-                    <p className='signup-p'>By signing up, or continuing with Facebook or Google,<br />
+                    <p className='signup-p'>By signing up, <br />
                     you agree to the FRESHCO <Link to='/'><span style={{textDecoration: 'underline'}}>Terms of Service</span></Link></p>
                 </form>
             </div>

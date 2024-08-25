@@ -192,6 +192,8 @@
     height: 100px;
     width: 250px;
     position: absolute;
+    margin-top: 10px;
+    left: -50%;
     top: 50px;
     border-radius: 10px;
     justify-content: center;
@@ -248,7 +250,9 @@
     background-color: #2C7847;
     color: white;
     border-radius: 5px;
-    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-form-input{
@@ -2189,29 +2193,17 @@
 /* user account */
 
 .general-account {
-    position: relative;
+    position: absolute;
     height: 91vh;
     width: 100%;
     overflow: scroll;
     background-position: center;
-    background-size: cover;
-}
-
-.general-account::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('./assets/setting.svg');
+    background-size: cover;background-image: url('./assets/setting.svg');
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    filter: blur(5px); 
     z-index: -1;
 }
-
 
 .account-setting-head{
     padding-top: 30px;
@@ -2997,8 +2989,17 @@
     .nav-zip-form-container{
         height: 80px;
         width: 200px;
-        top: 50px;
-        right: 0px;
+        left: -110px;
+        padding: 2px;
+    }
+    .nav-form-area{
+        height: 30px;
+    }
+    .nav-zip-input{
+        height: 30px;
+    }
+    .nav-form-button{
+        height: 30px;
     }
     
     .nav-zip-form{
@@ -3056,9 +3057,22 @@
     .sidebar-open{
         margin: 3px;
     }
-
-
-
+    .verify-container{
+        width: 90%;
+        padding-top: 30px;
+        padding-bottom: 10px;
+        height: auto;
+    }
+    .verify-container h4{
+        margin-top: 0;
+    }
+    .verify-container p{
+        font-size: 13px;
+    }
+    .otp-container input{
+        height: 30px;
+        width: 30px;
+    }
 
 
     /* shop */
@@ -3212,7 +3226,7 @@
 
 
     /* account  */
-    .general-account::before{
+    .general-account{
         background-image: none;
     }
     .account-setting-head{
@@ -3406,5 +3420,37 @@
     }
     .cart-count-container{
         width: 95px;
+    }
+    .phone-store-category {
+        height: 70px;
+        width: 100%;
+        overflow-x: auto; 
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: nowrap;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .centered {
+        justify-content: center;
+    }
+    
+    .left-aligned {
+        justify-content: flex-start;
+    }
+    
+    .store-product-cat{
+        padding: 7px;
+        border: 0.5px solid black;
+        border-radius: 10px;
+        height: 45px;
+        width: 45px;
+        display: grid;
+        place-items: center;
+    }
+    .store-icons{
+        font-size: 30px;
     }
 }
