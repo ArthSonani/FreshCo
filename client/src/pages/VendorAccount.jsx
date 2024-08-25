@@ -130,7 +130,6 @@ export default function VendorAccount() {
       const data = await res.json()
 
       if(data.success === false){
-        console.log(data.message)
         setFormError(data.message)
         return
       }

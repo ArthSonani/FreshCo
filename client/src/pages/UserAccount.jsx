@@ -44,7 +44,6 @@ export default function UserAccount() {
         
         const data = await res.json()
 
-        console.log(data)
   
         if(data.success === false){
           console.log(data.message)
@@ -98,8 +97,6 @@ export default function UserAccount() {
       })
       
       const data = await res.json()
-
-      console.log(data)
 
       if(data.success === false){
         console.log(data.message)

@@ -124,7 +124,6 @@ export default function Inventory() {
                     "state_changed",
                     (snapshot)=>{
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log(`upload is ${progress}% done`)
                     },
                     (error)=>{
                         console.log(error)
@@ -198,7 +197,6 @@ export default function Inventory() {
     }
 
     useEffect(()=>{
-        console.log('called')
         getInventoryData()
     }, [currentVendor, searchQuery])
     

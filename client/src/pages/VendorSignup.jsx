@@ -84,7 +84,6 @@ export default function Signup() {
                         "state_changed",
                         (snapshot)=>{
                             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            console.log(`logo upload is ${progress}% done`)
                         },
                         (error)=>{
                             console.log(error)
@@ -252,7 +251,6 @@ export default function Signup() {
                 return
             }
 
-            console.log(data)
             setCorrectOTP(data.otp)
             setTimer(60);
             setFormError(null)

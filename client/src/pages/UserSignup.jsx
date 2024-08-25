@@ -90,7 +90,6 @@ export default function Signup() {
         }
     }, [timer]);
 
-    console.log("sd")
     const handleChange = (index, e) => {
         const value = e.target.value;
         if (isNaN(value)) return;
@@ -196,7 +195,6 @@ export default function Signup() {
                 return
             }
 
-            console.log(data)
             setCorrectOTP(data.otp)
             setTimer(60);
             setFormError(null)

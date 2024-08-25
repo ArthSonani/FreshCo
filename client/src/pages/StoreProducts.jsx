@@ -92,7 +92,6 @@ export default function StoreProducts() {
       show.style.display === 'block' ? show.style.display = 'none' : show.style.display = 'block'
     }
   }
-  console.log(store? store.categories: null)
 
   return (
   <>
