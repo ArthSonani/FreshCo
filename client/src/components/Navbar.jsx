@@ -135,10 +135,7 @@ export default function Navbar() {
       dispatch(updateUser(data[0]))
 
       setLoading(false)
-      const zipForm = document.querySelector('.nav-zip-form-container');
-      const zipBackgroung = document.querySelector('.nav-zip-form-background');
-      zipBackgroung.style.display = 'none';
-      zipForm.style.display = 'none';
+      hideZip()
     }
     catch (err) {
       setLoading(false)
