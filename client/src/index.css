@@ -3421,26 +3421,25 @@
     .cart-count-container{
         width: 95px;
     }
+
+
+
     .phone-store-category {
         height: 70px;
         width: 100%;
         overflow-x: auto; 
         display: flex;
         align-items: center;
+        justify-content:flex-start;
         gap: 10px;
         white-space: nowrap;
         padding-left: 15px;
         padding-right: 15px;
     }
-    
-    .centered {
-        justify-content: center;
+    .phone-store-category > * {
+        flex-shrink: 0;
     }
-    
-    .left-aligned {
-        justify-content: flex-start;
-    }
-    
+
     .store-product-cat{
         padding: 7px;
         border: 0.5px solid black;
