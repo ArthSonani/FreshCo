@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import Item from '../components/Item';
 import { useParams } from 'react-router-dom'
 import { categoriesData } from '../categoriesData.js'
@@ -15,18 +15,6 @@ export default function StoreProducts() {
   const [ store, setStore ] = useState(null)
   const [ category, setCategory ] = useState('shop-all') 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  
-  const containerRef = useRef(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-
-  useEffect(() => {
-      const container = containerRef.current;
-      if (container.scrollWidth > container.clientWidth) {
-          setIsOverflowing(true);
-      } else {
-          setIsOverflowing(false);
-      }
-  }, [store]);
 
   const handleResize = () => {
     setWindowWidth(window.innerWidth);
@@ -104,14 +92,12 @@ export default function StoreProducts() {
       show.style.display === 'block' ? show.style.display = 'none' : show.style.display = 'block'
     }
   }
-  
+  console.log(store? store.categories: null)
 
   return (
   <>
     {windowWidth < 500? 
-    <div className={`phone-store-category ${isOverflowing ? 'left-aligned' : 'centered'}`} 
-          ref={containerRef}
-      >
+    <div className='phone-store-category'>
         <div className='store-product-cat' id='all-stores' onClick={()=>{setCategory('shop-all')}}>
             <span className="store-icons material-symbols-outlined">storefront</span>
         </div>
