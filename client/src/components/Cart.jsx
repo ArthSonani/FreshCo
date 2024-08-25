@@ -210,7 +210,7 @@ export default function Cart() {
     }
   
     try{
-      const res = await fetch('/api/payment/order',{
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/payment/order',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -244,7 +244,7 @@ export default function Cart() {
 
       handler : async (response) => {
         try{
-          const verifyRes = await fetch('/api/payment/verify',{
+          const verifyRes = await fetch('https://freshco-0dlm.onrender.com/api/payment/verify',{
             method : 'POST',
             headers : {
               'Content-Type' : 'application/json'
@@ -287,7 +287,7 @@ export default function Cart() {
   
   async function saveUserOrder() {
     try{
-      const res = await fetch('/api/user/save-order',{
+      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/save-order',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
