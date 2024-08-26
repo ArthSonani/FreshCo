@@ -85,7 +85,7 @@ export default function Shop() {
 
   useEffect(()=>{
     getNearStores()
-  }, [params.category, urlParams.get('search'), currentUser.zipcode])
+  }, [params.category, urlParams.get('search'), currentUser? currentUser.zipcode: null])
 
   // useEffect(() => {
   //   const loadAssets = async () => {

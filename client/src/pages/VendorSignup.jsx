@@ -112,7 +112,7 @@ export default function Signup() {
                     dispatch(vendorSigninFailure(data.message))
                     return
                 }
-                toast.success(`Welcome ${data.firstname} to ${data.businessName}!`)
+                toast.success(`Welcome ${data.name} to ${data.businessName}!`)
                 dispatch(vendorSigninSuccess(data))
                 navigate('/inventory')
             }
@@ -182,6 +182,7 @@ export default function Signup() {
 
     async function checkData(event){
         event.preventDefault()
+        const mailformat = /(\W|^)[\w.+\-]*@gmail\.com(\W|$)/;
 
         const validateFormData = () => {
             if (!formData.name) return 'Must provide your name!';
@@ -191,6 +192,7 @@ export default function Signup() {
             else if (!formData.zipcode) return 'Must provide your store area zipcode!';
             else if (formData.categories.length == 0) return 'At least select one category related to your store!'
             else if (!formData.email) return 'Must provide your email!';
+            else if(!formData.email.match(mailformat)) return 'Invalid email!';
             else if (!formData.password) return 'Must provide strong password!';
             else if (!formData.c_password) return 'Must provide confirm password!';
             else if(formData.password !== formData.c_password) return "Password doesn't match!"

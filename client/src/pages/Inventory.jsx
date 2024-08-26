@@ -167,6 +167,7 @@ export default function Inventory() {
                 storeId: currentVendor ? currentVendor._id : null
             })
             setImage(null)
+            document.querySelector(".photo-button").innerHTML = 'Upload a Product image';
             getInventoryData()
         }
         catch(err){

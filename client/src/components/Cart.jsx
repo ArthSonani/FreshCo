@@ -277,7 +277,7 @@ export default function Cart() {
       },
 
       theme : {
-        color : "#4B6340"
+        color : "#2C7847"
       }
     }
 

@@ -17,7 +17,7 @@ export default function Signup() {
     const [ formData, setFormData ] = useState(
         { firstname: '', lastname: '', email: '', zipcode: '', password: '', c_password: '', area: '' }
     )
-    
+
     const { loading, error } = useSelector(state =>state.user)
     const [ formError, setFormError ] = useState(null)
     const [warning, setWarning] = useState(null)
@@ -130,11 +130,14 @@ export default function Signup() {
         event.preventDefault()
 
         const validateFormData = () => {
+            const mailformat = /(\W|^)[\w.+\-]*@gmail\.com(\W|$)/;
+
             if (!formData.firstname) return 'Must provide your first name!';
             else if (!formData.lastname) return 'Must provide your last name!';
             else if (!formData.zipcode) return 'Must provide your area zipcode!';
             else if (!formData.area) return 'Must provide your area name!';
             else if (!formData.email) return 'Must provide your email!';
+            else if(!formData.email.match(mailformat)) return 'Invalid email!';
             else if (!formData.password) return 'Must provide strong password!';
             else if (!formData.c_password) return 'Must provide confirm password!';
             else if(formData.password !== formData.c_password) return "Password doesn't match!"
