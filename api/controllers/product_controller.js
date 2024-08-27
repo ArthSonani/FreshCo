@@ -63,7 +63,6 @@ export const remove = async (req, res, next) => {
     const { productId, storeId } = req.body;
 
     try{
-        await Product.deleteOne({_id: productId})
 
         await Cart.updateMany(
             { 'products.product': productId },
