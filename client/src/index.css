@@ -3401,9 +3401,15 @@
     }
     .item-price{
         padding-bottom: 0px;
+        font-size: 12px;
     }
     .item-name{
         padding-bottom: 0;
+        font-size: 12px;
+        overflow: hidden;
+    }
+    .item-in-stock{
+        font-size: 10px;
     }
     .item-back p{
         font-size: 10px;
