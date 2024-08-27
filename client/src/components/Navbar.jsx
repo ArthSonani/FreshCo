@@ -58,7 +58,7 @@ export default function Navbar() {
   async function checkForOrders(e) {
     e ? e.preventDefault() : null
     try {
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/order-count', {
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/shop/order-count', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ export default function Navbar() {
   
   async function updateOrderCount() {
     try {
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/update-order-count', {
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/shop/update-order-count', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -118,7 +118,7 @@ export default function Navbar() {
     event.preventDefault()
     setLoading(true)
     try {
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/update-zip', {
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/update-zip', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'

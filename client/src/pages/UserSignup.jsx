@@ -44,7 +44,7 @@ export default function Signup() {
         else if (correctOTP === combinedOtp){
             try{
                 dispatch(userSigninStart())
-                const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/signup', {
+                const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/signup', {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ export default function Signup() {
         }
 
         try{
-            const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/check-email', {
+            const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/check-email', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -184,7 +184,7 @@ export default function Signup() {
         event? event.preventDefault() : null
 
         try{
-            const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/generate-otp', {
+            const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/generate-otp', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'

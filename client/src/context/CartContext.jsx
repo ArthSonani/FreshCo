@@ -10,7 +10,7 @@ const ActiveCartState = (props) =>{
 
   async function getActiveCart(user, store){
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/get-active-cart',{
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/get-active-cart',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'

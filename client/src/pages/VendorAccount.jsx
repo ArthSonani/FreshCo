@@ -54,7 +54,7 @@ export default function VendorAccount() {
   useEffect(()=>{
     async function getcurrentVendor(){
       try{
-        const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/store-data', {
+        const res = await fetch('https://fresh-co-backend.vercel.app/api/shop/store-data', {
           method : 'POST',
           headers : { 
             'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ export default function VendorAccount() {
     } 
 
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/update-account', {
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/shop/update-account', {
         method : 'POST',
         headers : { 
           'Content-Type': 'application/json'

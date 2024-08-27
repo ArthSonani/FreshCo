@@ -39,7 +39,7 @@ export default function Cart() {
  
   async function allStoreCarts() {
     try {
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/carts', {
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/carts', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ export default function Cart() {
 
   async function getStore() {
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/get-store',{
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/get-store',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -86,7 +86,7 @@ export default function Cart() {
 
   async function checkAvailability() {
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/check-availability',{
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/check-availability',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -117,7 +117,7 @@ export default function Cart() {
 
   async function updateInventory() {
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/update-inventory',{
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/update-inventory',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -210,7 +210,7 @@ export default function Cart() {
     }
   
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/payment/order',{
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/payment/order',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
@@ -244,7 +244,7 @@ export default function Cart() {
 
       handler : async (response) => {
         try{
-          const verifyRes = await fetch('https://freshco-0dlm.onrender.com/api/payment/verify',{
+          const verifyRes = await fetch('https://fresh-co-backend.vercel.app/api/payment/verify',{
             method : 'POST',
             headers : {
               'Content-Type' : 'application/json'
@@ -287,7 +287,7 @@ export default function Cart() {
   
   async function saveUserOrder() {
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/save-order',{
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/save-order',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'

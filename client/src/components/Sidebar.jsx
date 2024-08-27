@@ -17,7 +17,7 @@ export default function Sidebar() {
     try {
       activeLink('user-signout')
       dispatch(userSignoutStart())
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/user/auth/signout')
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/signout')
       const data = res.json()
       if (data.success === false) {
         dispatch(userSignoutFailure(data.message))
@@ -35,7 +35,7 @@ export default function Sidebar() {
     try {
       activeLink('vendor-signout')
       dispatch(vendorSignoutStart())
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/vendor/auth/signout')
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/vendor/auth/signout')
       const data = res.json()
       if (data.success === false) {
         dispatch(vendorSignoutFailure(data.message))

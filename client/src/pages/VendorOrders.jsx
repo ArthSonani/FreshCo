@@ -26,7 +26,7 @@ export default function Orders() {
 
   async function userOrders() {
     try{
-      const res = await fetch('https://freshco-0dlm.onrender.com/api/shop/orders',{
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/shop/orders',{
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json'
