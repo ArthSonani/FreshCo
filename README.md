@@ -59,5 +59,5 @@ Link :  *(https://fresh-co.vercel.app/)*
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/freshco.git
+   git clone https://github.com/ArthSonani/FreshCo.git
    cd freshco
