@@ -6,7 +6,7 @@
 
 ## 🔗 Live Demo
 
-Link :  *(https://fresh-co.vercel.app/)*
+Link :  *https://fresh-co.vercel.app/*
 
 ---
 
