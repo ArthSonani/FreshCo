@@ -48,9 +48,8 @@ Link :  *https://fresh-co.vercel.app/*
 ### 📦 Prerequisites
 
 - Node.js & npm
-- MongoDB URI (local or Atlas)
-- Razorpay API keys
-- OTP service API (e.g., Twilio, Fast2SMS)
+- MongoDB URI
+- Razorpay and other API keys
 
 ---
 
