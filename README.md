@@ -39,8 +39,7 @@ Link :  *https://fresh-co.vercel.app/*
 - **Database**: MongoDB
 - **Authentication**: OTP, JWT
 - **Payments**: Razorpay Gateway
-- **Deployment**: Vercel (Frontend), Render/Heroku/other (API)
-- **Version Control**: Git
+- **Deployment**: Vercel (Frontend), Render (API)
 
 ---
 
