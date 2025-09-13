@@ -13,49 +13,6 @@ export default function Shop() {
 
   const [ stores , setStores ] = React.useState([])
 
-
-  // const [assetsLoaded, setAssetsLoaded] = useState(false);
-
-  // // Function to check if fonts are loaded
-  // const checkFontsLoaded = () => {
-  //   return document.fonts.ready;
-  // };
-
-  // // Function to check if all images are loaded
-  // const checkImagesLoaded = () => {
-  //   return new Promise((resolve) => {
-  //     const images = document.images;
-  //     let loadedCount = 0;
-  //     const totalCount = images.length;
-
-  //     const checkCompletion = () => {
-  //       if (loadedCount === totalCount) {
-  //         resolve();
-  //       }
-  //     };
-
-  //     for (let img of images) {
-  //       if (img.complete) {
-  //         loadedCount++;
-  //         checkCompletion();
-  //       } else {
-  //         img.onload = () => {
-  //           loadedCount++;
-  //           checkCompletion();
-  //         };
-  //         img.onerror = () => {
-  //           loadedCount++;
-  //           checkCompletion();
-  //         };
-  //       }
-  //     }
-
-  //     if (totalCount === 0) {
-  //       resolve();
-  //     }
-  //   });
-  // };
-
   async function getNearStores(){
     try{
       const res = await fetch('https://fresh-co-backend.vercel.app/api/shop/near-store', {
