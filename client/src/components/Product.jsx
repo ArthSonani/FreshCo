@@ -112,12 +112,3 @@ export default function Product(props) {
 
   )
 }
-
-
-
-
-// allow read;
-// allow write : if
-// request.resource.size < 1024 * 1024 &&
-// request.resource.contentType.matches('image/.*')
-
