@@ -229,9 +229,3 @@ export default function UserAccount() {
     )
   )
 }
-
-
-
-
-
-// update data to redux when update done
