@@ -153,10 +153,3 @@ export default function Home() {
     </section>
   );
 }
-
-
-
-// #E9EFE6
-// #BDCFB5  -- #7f9077
-// #4B6340   -- #2C7847
-// #263120
