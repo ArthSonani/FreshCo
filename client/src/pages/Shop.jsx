@@ -44,15 +44,6 @@ export default function Shop() {
     getNearStores()
   }, [params.category, urlParams.get('search'), currentUser? currentUser.zipcode: null])
 
-  // useEffect(() => {
-  //   const loadAssets = async () => {
-  //     await Promise.all([getNearStores(), checkFontsLoaded(), checkImagesLoaded()]);
-  //     setAssetsLoaded(true);
-  //   };
-
-  //   loadAssets();
-  // }, []);
-
   const nearStoreData = stores? stores.map((store)=>{
     return (
       <Store
