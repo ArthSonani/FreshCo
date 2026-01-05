@@ -51,11 +51,8 @@ export default function UserAccount() {
           return
         }
 
-        setTimeout(() => { 
-          setAccountData(data.userData)
-          dispatch(userSigninSuccess(data.userData))
-        }, 5000);
-        
+        setAccountData(data.userData)
+        dispatch(userSigninSuccess(data.userData))
       }
       catch(err){
         console.log(err)
