@@ -151,6 +151,8 @@ export default function Signup() {
         }
 
         try{
+
+            console.log("Checking email availability...");
             const res = await fetch('/api/user/auth/check-email', {
                 method: "POST",
                 headers: {
@@ -159,6 +161,8 @@ export default function Signup() {
                 body: JSON.stringify({email : formData.email})
             })
             const data = await res.json()
+
+            console.log(data);
 
             if(data.success === false){
                 console.log(data.message)
@@ -183,6 +187,7 @@ export default function Signup() {
     async function generateOTP(event){
         event? event.preventDefault() : null
 
+        console.log("Generating OTP...");
         try{
             const res = await fetch('/api/user/auth/generate-otp', {
                 method: "POST",
@@ -197,6 +202,8 @@ export default function Signup() {
                 console.log(data.message)
                 return
             }
+
+            console.log("OTP generated:", data.otp);
 
             setCorrectOTP(data.otp)
             setTimer(60);
