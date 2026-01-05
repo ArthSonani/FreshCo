@@ -206,6 +206,7 @@ export default function Signup() {
         }
 
         try{
+            console.log('Checking email availability...');
             const res = await fetch('https://fresh-co-backend.vercel.app/api/vendor/auth/check-email', {
                 method: "POST",
                 headers: {
@@ -239,6 +240,7 @@ export default function Signup() {
         event? event.preventDefault() : null
 
         try{
+            console.log('Generating OTP...');
             const res = await fetch('https://fresh-co-backend.vercel.app/api/vendor/auth/generate-otp', {
                 method: "POST",
                 headers: {
@@ -247,6 +249,8 @@ export default function Signup() {
                 body: JSON.stringify({email : formData.email})
             })
             const data = await res.json()
+
+            console.log(data);
 
             if(data.success === false){
                 console.log(data.message)
