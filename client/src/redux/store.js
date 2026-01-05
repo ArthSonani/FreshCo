@@ -8,21 +8,28 @@ import userReducer from './user/userSlice'
 import vendorReducer from './vendor/vendorSlice'
 
 
+// Persist only stable auth data; avoid transient fields like error/loading
+const userPersistConfig = {
+  key: 'user',
+  storage,
+  version: 1,
+  blacklist: ['error', 'loading']
+}
 
-const rootreducer = combineReducers({
-  user: userReducer, 
-  vendor: vendorReducer
+const vendorPersistConfig = {
+  key: 'vendor',
+  storage,
+  version: 1,
+  blacklist: ['error', 'loading']
+}
+
+const rootReducer = combineReducers({
+  user: persistReducer(userPersistConfig, userReducer),
+  vendor: persistReducer(vendorPersistConfig, vendorReducer)
 })
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  version: 1
-}
-const persistedReducer = persistReducer(persistConfig, rootreducer)
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
 
   middleware: (getDefaultMiddleware)=>
     getDefaultMiddleware({

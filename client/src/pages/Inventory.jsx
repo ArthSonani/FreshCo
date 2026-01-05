@@ -138,7 +138,7 @@ export default function Inventory() {
                 
             const updatedFormData = {...formData, image : downloadURL}
        
-            const res = await fetch('https://fresh-co-backend.vercel.app/api/inventory/add-product', {
+            const res = await fetch('/api/inventory/add-product', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -177,7 +177,7 @@ export default function Inventory() {
 
     async function getInventoryData(){
         try{
-            const res = await fetch('https://fresh-co-backend.vercel.app/api/inventory/data',{
+            const res = await fetch('/api/inventory/data',{
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'

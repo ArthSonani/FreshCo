@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSigninSuccess } from '../redux/user/userSlice'
 import Loading from '../components/Loading'
+import { current } from '@reduxjs/toolkit'
 
 export default function UserAccount() {
 
@@ -34,12 +35,12 @@ export default function UserAccount() {
   useEffect(()=>{
     async function getCurrentUser(){
       try{
-        const res = await fetch('https://fresh-co-backend.vercel.app/api/user/user-data', {
+        const res = await fetch('/api/user/user-data', {
           method : 'POST',
           headers : { 
             'Content-Type': 'application/json'
           },
-          body : JSON.stringify({user : currentUser._id})
+          body : JSON.stringify({user : currentUser?._id})
         })
         
         const data = await res.json()
@@ -49,9 +50,11 @@ export default function UserAccount() {
           console.log(data.message)
           return
         }
-  
-        setAccountData(data.userData)
-        dispatch(userSigninSuccess(data.userData))
+
+        setTimeout(() => { 
+          setAccountData(data.userData)
+          dispatch(userSigninSuccess(data.userData))
+        }, 5000);
         
       }
       catch(err){
@@ -59,8 +62,7 @@ export default function UserAccount() {
       }
     }
     getCurrentUser()
-  }, [currentUser._id])
-
+  }, [currentUser?._id])
 
   async function updateAccount(){
 
@@ -88,12 +90,12 @@ export default function UserAccount() {
     } 
 
     try{
-      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/update-account', {
+      const res = await fetch('/api/user/update-account', {
         method : 'POST',
         headers : { 
           'Content-Type': 'application/json'
         },
-        body : JSON.stringify({user : currentUser._id, field: currentField, value: updatedValue, currentPassword: updatePassword.current, newPassword: updatePassword.new})
+        body : JSON.stringify({user : currentUser?._id, field: currentField, value: updatedValue, currentPassword: updatePassword.current, newPassword: updatePassword.new})
       })
       
       const data = await res.json()
@@ -137,6 +139,7 @@ export default function UserAccount() {
   }
 
   return (
+    (currentUser === null ? <div>Return to Login</div> :
     (!accountData? <Loading /> :
       <>
         <div className='update-container'>
@@ -227,5 +230,6 @@ export default function UserAccount() {
         </div>
       </>
     )
+  )
   )
 }

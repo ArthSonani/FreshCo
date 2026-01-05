@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { vendorSigninStart, vendorSigninSuccess, vendorSigninFailure } from '../redux/vendor/vendorSlice'
+import { clearVendorError, vendorSigninStart, vendorSigninSuccess, vendorSigninFailure } from '../redux/vendor/vendorSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
 
@@ -13,6 +13,10 @@ export default function Signin() {
     )
     
     const { loading, error } = useSelector((state)=>state.vendor)
+
+    React.useEffect(()=>{
+        dispatch(clearVendorError())
+    }, [dispatch])
 
     function updateData(event){
         const { name, value } = event.target
@@ -29,7 +33,7 @@ export default function Signin() {
         event.preventDefault()
         try{
             dispatch(vendorSigninStart())
-            const res = await fetch('https://fresh-co-backend.vercel.app/api/vendor/auth/signin',{
+            const res = await fetch('/api/vendor/auth/signin',{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'

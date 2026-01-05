@@ -10,6 +10,9 @@ const vendorSlice = createSlice({
   name: 'vendor',
   initialState,
   reducers: {
+    clearVendorError(state) {
+      state.error = null
+    },
     vendorSigninStart(state) {
       state.loading = true
       state.error = null
@@ -40,6 +43,7 @@ const vendorSlice = createSlice({
 
 
 export const { 
+  clearVendorError,
     vendorSigninStart, 
     vendorSigninSuccess, 
     vendorSigninFailure, 

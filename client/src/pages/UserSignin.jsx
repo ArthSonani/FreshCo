@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { userSigninStart, userSigninSuccess, userSigninFailure } from '../redux/user/userSlice'
+import { clearUserError, userSigninStart, userSigninSuccess, userSigninFailure } from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
 
@@ -13,6 +13,10 @@ export default function Signin() {
     )
     
     const { loading, error } = useSelector((state)=>state.user)
+
+    React.useEffect(()=>{
+        dispatch(clearUserError())
+    }, [dispatch])
 
     function updateData(event){
         const { name, value } = event.target
@@ -29,7 +33,7 @@ export default function Signin() {
         event.preventDefault()
         try{
             dispatch(userSigninStart())
-            const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/signin',{
+            const res = await fetch('/api/user/auth/signin',{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
