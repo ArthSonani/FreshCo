@@ -79,12 +79,6 @@ export default function Navbar() {
       console.log(err)
     }
   }
-
-  useEffect(() => {
-    if (currentVendor) {
-      checkForOrders(); 
-    }
-  }, []);
   
   async function updateOrderCount() {
     try {
@@ -112,7 +106,7 @@ export default function Navbar() {
 
   useEffect(()=>{
     checkForOrders()
-  }, [currentVendor ? currentVendor.orderCount : null])
+  }, [currentVendor?.orderCount])
 
   async function setZip(event) {
     event.preventDefault()
