@@ -35,7 +35,7 @@ export default function UserAccount() {
   useEffect(()=>{
     async function getCurrentUser(){
       try{
-        const res = await fetch('/api/user/user-data', {
+        const res = await fetch('https://fresh-co-backend.vercel.app/api/user/user-data', {
           method : 'POST',
           headers : { 
             'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ export default function UserAccount() {
     } 
 
     try{
-      const res = await fetch('/api/user/update-account', {
+      const res = await fetch('https://fresh-co-backend.vercel.app/api/user/update-account', {
         method : 'POST',
         headers : { 
           'Content-Type': 'application/json'
