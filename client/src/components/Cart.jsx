@@ -6,6 +6,7 @@ import cartImage from '../assets/empty-cart.png'
 import { CartContext } from '../context/CartContext'
 import CartItem from './CartItem'
 import Loading from './Loading'
+import toast from 'react-hot-toast'
 
 
 export default function Cart() {
