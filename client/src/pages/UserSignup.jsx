@@ -44,7 +44,7 @@ export default function Signup() {
         else if (correctOTP === combinedOtp){
             try{
                 dispatch(userSigninStart())
-                const res = await fetch('/api/user/auth/signup', {
+                const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/signup', {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -153,7 +153,7 @@ export default function Signup() {
         try{
 
             console.log("Checking email availability...");
-            const res = await fetch('/api/user/auth/check-email', {
+            const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/check-email', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -189,7 +189,7 @@ export default function Signup() {
 
         console.log("Generating OTP...");
         try{
-            const res = await fetch('/api/user/auth/generate-otp', {
+            const res = await fetch('https://fresh-co-backend.vercel.app/api/user/auth/generate-otp', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -203,7 +203,7 @@ export default function Signup() {
                 return
             }
 
-            console.log("OTP generated:", data.otp);
+            console.log("OTP generated:", data);
 
             setCorrectOTP(data.otp)
             setTimer(60);
